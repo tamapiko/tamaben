@@ -3,310 +3,91 @@
     {
       "name": "小学1年生",
       "subjects": [
-        {
-          "name": "算数",
-          "units": [
-            { "name": "たし算", "file": "drill/算数 たし算.pdf" },
-            { "name": "ひき算", "file": "drill/算数 ひき算.pdf" },
-            { "name": "かけ算", "file": "drill/算数 かけ算.pdf" },
-            { "name": "わり算", "file": "drill/算数 わり算.pdf" }
-          ]
-        },
-        {
-          "name": "国語",
-          "units": [
-            { "name": "ひらがな", "file": "drill/国語 ひらがな.pdf" },
-            { "name": "カタカナ", "file": "drill/国語 カタカナ.pdf" },
-            { "name": "基本的な読み書き", "file": "drill/国語 基本的な読み書き.pdf" }
-          ]
-        },
-        {
-          "name": "理科",
-          "units": [
-            { "name": "季節と天気", "file": "drill/理科 季節と天気.pdf" },
-            { "name": "身近な動物と植物", "file": "drill/理科 身近な動物と植物.pdf" }
-          ]
-        },
-        {
-          "name": "社会",
-          "units": [
-            { "name": "家族と学校", "file": "drill/社会 家族と学校.pdf" },
-            { "name": "身近な地図", "file": "drill/社会 身近な地図.pdf" }
-          ]
-        },
-        {
-          "name": "英語",
-          "units": [
-            { "name": "基本的な英単語", "file": "drill/英語 基本的な英単語.pdf" },
-            { "name": "簡単な英会話", "file": "drill/英語 簡単な英会話.pdf" }
-          ]
-        }
+        { "name": "算数", "units": [{ "name": "", "file": "math_1.pdf" }] },
+        { "name": "国語", "units": [{ "name": "", "file": "languag_1.pdf" }] },
+        { "name": "理科", "units": [{ "name": "", "file": "science_1.pdf" }] },
+        { "name": "社会", "units": [{ "name": "", "file": "social-studies_1.pdf" }] },
+        { "name": "英語", "units": [{ "name": "", "file": "english_1.pdf" }] }
       ]
     },
     {
       "name": "小学2年生",
       "subjects": [
-        {
-          "name": "算数",
-          "units": [
-            { "name": "三角形と四角形", "file": "drill/算数 三角形と四角形.pdf" },
-            { "name": "時間の概念", "file": "drill/算数 時間の概念.pdf" },
-            { "name": "お金の計算", "file": "drill/算数 お金の計算.pdf" }
-          ]
-        },
-        {
-          "name": "国語",
-          "units": [
-            { "name": "漢字(小学2年生)", "file": "drill/国語 漢字(小学2年生).pdf" },
-            { "name": "文章読解", "file": "drill/国語 文章読解.pdf" },
-            { "name": "話の内容の理解", "file": "drill/国語 話の内容の理解.pdf" }
-          ]
-        },
-        {
-          "name": "理科",
-          "units": [
-            { "name": "植物の成長と変化", "file": "drill/理科 植物の成長と変化.pdf" },
-            { "name": "季節とその変化", "file": "drill/理科 季節とその変化.pdf" }
-          ]
-        },
-        {
-          "name": "社会",
-          "units": [
-            { "name": "地域の歴史と文化", "file": "drill/社会 地域の歴史と文化.pdf" },
-            { "name": "旅行と交通", "file": "drill/社会 旅行と交通.pdf" }
-          ]
-        },
-        {
-          "name": "英語",
-          "units": [
-            { "name": "基本的な英単語", "file": "drill/英語 基本的な英単語.pdf" },
-            { "name": "シンプルな英文", "file": "drill/英語 シンプルな英文.pdf" }
-          ]
-        }
+        { "name": "算数", "units": [{ "name": "", "file": "math_2.pdf" }] },
+        { "name": "国語", "units": [{ "name": "", "file": "language_2.pdf" }] },
+        { "name": "理科", "units": [{ "name": "", "file": "science_2.pdf" }] },
+        { "name": "社会", "units": [{ "name": "", "file": "social-studies_2.pdf" }] },
+        { "name": "英語", "units": [{ "name": "", "file": "english_2.pdf" }] }
       ]
     },
     {
       "name": "小学3年生",
       "subjects": [
-        {
-          "name": "算数",
-          "units": [
-            { "name": "小数の計算", "file": "drill/算数 小数の計算.pdf" },
-            { "name": "分数の計算", "file": "drill/算数 分数の計算.pdf" },
-            { "name": "長さと重さの単位", "file": "drill/算数 長さと重さの単位.pdf" },
-            { "name": "グラフと表", "file": "drill/算数 グラフと表.pdf" }
-          ]
-        },
-        {
-          "name": "国語",
-          "units": [
-            { "name": "漢字(小学3年生)", "file": "drill/国語 漢字(小学3年生).pdf" },
-            { "name": "文章の表現", "file": "drill/国語 文章の表現.pdf" },
-            { "name": "読解力の向上", "file": "drill/国語 読解力の向上.pdf" }
-          ]
-        },
-        {
-          "name": "理科",
-          "units": [
-            { "name": "天気と季節", "file": "drill/理科 天気と季節.pdf" },
-            { "name": "身近な生物", "file": "drill/理科 身近な生物.pdf" }
-          ]
-        },
-        {
-          "name": "社会",
-          "units": [
-            { "name": "地域とその特徴", "file": "drill/社会 地域とその特徴.pdf" },
-            { "name": "地図とその使い方", "file": "drill/社会 地図とその使い方.pdf" }
-          ]
-        },
-        {
-          "name": "英語",
-          "units": [
-            { "name": "基本的な英単語", "file": "drill/英語 基本的な英単語.pdf" },
-            { "name": "簡単な会話", "file": "drill/英語 簡単な会話.pdf" }
-          ]
-        }
+        { "name": "算数", "units": [{ "name": "", "file": "math_3.pdf" }] },
+        { "name": "国語", "units": [{ "name": "", "file": "language_3.pdf" }] },
+        { "name": "理科", "units": [{ "name": "", "file": "science_3.pdf" }] },
+        { "name": "社会", "units": [{ "name": "", "file": "social-studies_3.pdf" }] },
+        { "name": "英語", "units": [{ "name": "", "file": "english_3.pdf" }] }
       ]
     },
     {
       "name": "小学4年生",
       "subjects": [
-        {
-          "name": "算数",
-          "units": [
-            { "name": "小数と分数の計算", "file": "drill/算数 小数と分数の計算.pdf" },
-            { "name": "面積と体積", "file": "drill/算数 面積と体積.pdf" },
-            { "name": "割合と比", "file": "drill/算数 割合と比.pdf" },
-            { "name": "平均と中央値", "file": "drill/算数 平均と中央値.pdf" },
-            { "name": "図形の合同と相似", "file": "drill/算数 図形の合同と相似.pdf" }
-          ]
-        },
-        {
-          "name": "国語",
-          "units": [
-            { "name": "漢字(小学4年生)", "file": "drill/国語 漢字(小学4年生).pdf" },
-            { "name": "文章の書き方", "file": "drill/国語 文章の書き方.pdf" },
-            { "name": "作文の技術", "file": "drill/国語 作文の技術.pdf" }
-          ]
-        },
-        {
-          "name": "理科",
-          "units": [
-            { "name": "生物の多様性", "file": "drill/理科 生物の多様性.pdf" },
-            { "name": "天気と地球の環境", "file": "drill/理科 天気と地球の環境.pdf" }
-          ]
-        },
-        {
-          "name": "社会",
-          "units": [
-            { "name": "日本の歴史と文化", "file": "drill/社会 日本の歴史と文化.pdf" },
-            { "name": "地球の地形と地域", "file": "drill/社会 地球の地形と地域.pdf" }
-          ]
-        },
-        {
-          "name": "英語",
-          "units": [
-            { "name": "基本的な英単語", "file": "drill/英語 基本的な英単語.pdf" },
-            { "name": "シンプルな英文", "file": "drill/英語 シンプルな英文.pdf" }
-          ]
-        }
+        { "name": "算数", "units": [{ "name": "", "file": "math_4.pdf" }] },
+        { "name": "国語", "units": [{ "name": "", "file": "language_4.pdf" }] },
+        { "name": "理科", "units": [{ "name": "", "file": "science_4.pdf" }] },
+        { "name": "社会", "units": [{ "name": "", "file": "social-studies_4.pdf" }] },
+        { "name": "英語", "units": [{ "name": "", "file": "english_4.pdf" }] }
+      ]
+    },
+    {
+      "name": "小学5年生",
+      "subjects": [
+        { "name": "算数", "units": [{ "name": "", "file": "math_5.pdf" }] },
+        { "name": "国語", "units": [{ "name": "", "file": "language_5.pdf" }] },
+        { "name": "理科", "units": [{ "name": "", "file": "science_5.pdf" }] },
+        { "name": "社会", "units": [{ "name": "", "file": "social-studies_5.pdf" }] },
+        { "name": "英語", "units": [{ "name": "", "file": "_english_5.pdf" }] }
+      ]
+    },
+    {
+      "name": "小学6年生",
+      "subjects": [
+        { "name": "算数", "units": [{ "name": "", "file": "math_6.pdf" }] },
+        { "name": "国語", "units": [{ "name": "", "file": "language_6.pdf" }] },
+        { "name": "理科", "units": [{ "name": "", "file": "science_6.pdf" }] },
+        { "name": "社会", "units": [{ "name": "", "file": "social-studies_6.pdf" }] },
+        { "name": "英語", "units": [{ "name": ", "file": "english_6.pdf" }] }
       ]
     },
     {
       "name": "中学1年生",
       "subjects": [
-        {
-          "name": "数学",
-          "units": [
-            { "name": "整数と計算", "file": "drill/数学 整数と計算.pdf" },
-            { "name": "一次方程式と不等式", "file": "drill/数学 一次方程式と不等式.pdf" },
-            { "name": "比と割合", "file": "drill/数学 比と割合.pdf" },
-            { "name": "図形と平面", "file": "drill/数学 図形と平面.pdf" },
-            { "name": "データの集計と表現", "file": "drill/数学 データの集計と表現.pdf" }
-          ]
-        },
-        {
-          "name": "国語",
-          "units": [
-            { "name": "文学の基礎", "file": "drill/国語 文学の基礎.pdf" },
-            { "name": "文章と文法", "file": "drill/国語 文章と文法.pdf" },
-            { "name": "作文のスキル", "file": "drill/国語 作文のスキル.pdf" }
-          ]
-        },
-        {
-          "name": "理科",
-          "units": [
-            { "name": "生物の基礎", "file": "drill/理科 生物の基礎.pdf" },
-            { "name": "物理と化学の基礎", "file": "drill/理科 物理と化学の基礎.pdf" }
-          ]
-        },
-        {
-          "name": "社会",
-          "units": [
-            { "name": "地理と地球の環境", "file": "drill/社会 地理と地球の環境.pdf" },
-            { "name": "歴史と文化の基礎", "file": "drill/社会 歴史と文化の基礎.pdf" }
-          ]
-        },
-        {
-          "name": "英語",
-          "units": [
-            { "name": "リーディング理解", "file": "drill/英語 リーディング理解.pdf" },
-            { "name": "ライティング技術", "file": "drill/英語 ライティング技術.pdf" },
-            { "name": "聴解力", "file": "drill/英語 聴解力.pdf" }
-          ]
-        }
+        { "name": "数学", "units": [{ "name": "", "file": "math_7.pdf" }] },
+        { "name": "国語", "units": [{ "name": "", "file": "language_7.pdf" }] },
+        { "name": "理科", "units": [{ "name": "", "file": "science_7.pdf" }] },
+        { "name": "社会", "units": [{ "name": "", "file": "social-studies_7.pdf" }] },
+        { "name": "英語", "units": [{ "name": "", "file": "english_7.pdf" }] }
       ]
     },
     {
       "name": "中学2年生",
       "subjects": [
-        {
-          "name": "数学",
-          "units": [
-            { "name": "平面図形", "file": "drill/数学 平面図形.pdf" },
-            { "name": "空間図形", "file": "drill/数学 空間図形.pdf" },
-            { "name": "数列", "file": "drill/数学 数列.pdf" },
-            { "name": "関数と方程式", "file": "drill/数学 関数と方程式.pdf" },
-            { "name": "三角関数", "file": "drill/数学 三角関数.pdf" }
-          ]
-        },
-        {
-          "name": "国語",
-          "units": [
-            { "name": "日本文学", "file": "drill/国語 日本文学.pdf" },
-            { "name": "詩と作文", "file": "drill/国語 詩と作文.pdf" },
-            { "name": "論理的文章", "file": "drill/国語 論理的文章.pdf" }
-          ]
-        },
-        {
-          "name": "理科",
-          "units": [
-            { "name": "生命と遺伝", "file": "drill/理科 生命と遺伝.pdf" },
-            { "name": "地球の歴史", "file": "drill/理科 地球の歴史.pdf" }
-          ]
-        },
-        {
-          "name": "社会",
-          "units": [
-            { "name": "日本の歴史と文化", "file": "drill/社会 日本の歴史と文化.pdf" },
-            { "name": "世界史", "file": "drill/社会 世界史.pdf" },
-            { "name": "地理と環境", "file": "drill/社会 地理と環境.pdf" }
-          ]
-        },
-        {
-          "name": "英語",
-          "units": [
-            { "name": "リーディング理解", "file": "drill/英語 リーディング理解.pdf" },
-            { "name": "ライティング技術", "file": "drill/英語 ライティング技術.pdf" },
-            { "name": "聴解力", "file": "drill/英語 聴解力.pdf" }
-          ]
-        }
+        { "name": "数学", "units": [{ "name": "", "file": "math_8.pdf" }] },
+        { "name": "国語", "units": [{ "name": "", "file": "language_8.pdf" }] },
+        { "name": "理科", "units": [{ "name": "", "file": "science_8.pdf" }] },
+        { "name": "社会", "units": [{ "name": "", "file": "social-studies_8.pdf" }] },
+        { "name": "英語", "units": [{ "name": "", "file": "english_8.pdf" }] }
       ]
     },
     {
       "name": "中学3年生",
       "subjects": [
-        {
-          "name": "数学",
-          "units": [
-            { "name": "立体図形", "file": "drill/数学 立体図形.pdf" },
-            { "name": "確率と統計", "file": "drill/数学 確率と統計.pdf" },
-            { "name": "関数とグラフ", "file": "drill/数学 関数とグラフ.pdf" },
-            { "name": "三角関数と三角比", "file": "drill/数学 三角関数と三角比.pdf" },
-            { "name": "指数・対数", "file": "drill/数学 指数・対数.pdf" }
-          ]
-        },
-        {
-          "name": "国語",
-          "units": [
-            { "name": "日本の文学史", "file": "drill/国語 日本の文学史.pdf" },
-            { "name": "物語と論説", "file": "drill/国語 物語と論説.pdf" },
-            { "name": "作文の技術", "file": "drill/国語 作文の技術.pdf" }
-          ]
-        },
-        {
-          "name": "理科",
-          "units": [
-            { "name": "生物の進化", "file": "drill/理科 生物の進化.pdf" },
-            { "name": "物質とエネルギー", "file": "drill/理科 物質とエネルギー.pdf" }
-          ]
-        },
-        {
-          "name": "社会",
-          "units": [
-            { "name": "日本の歴史と文化", "file": "drill/社会 日本の歴史と文化.pdf" },
-            { "name": "世界史と地理", "file": "drill/社会 世界史と地理.pdf" },
-            { "name": "現代社会と政治", "file": "drill/社会 現代社会と政治.pdf" }
-          ]
-        },
-        {
-          "name": "英語",
-          "units": [
-            { "name": "リーディング理解", "file": "drill/英語 リーディング理解.pdf" },
-            { "name": "ライティング技術", "file": "drill/英語 ライティング技術.pdf" },
-            { "name": "聴解力", "file": "drill/英語 聴解力.pdf" }
-          ]
-        }
+        { "name": "数学", "units": [{ "name": "", "file": "math_9.pdf" }] },
+        { "name": "国語", "units": [{ "name": "", "file": "language_9.pdf" }] },
+        { "name": "理科", "units": [{ "name": "", "file": "science_9.pdf" }] },
+        { "name": "社会", "units": [{ "name": "", "file": "social-studies_9.pdf" }] },
+        { "name": "英語", "units": [{ "name": "", "file": "english_9.pdf" }] }
       ]
     }
   ]
