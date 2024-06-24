@@ -8,7 +8,9 @@
           "units": [
             { "name": "漢字練習(小1)", "file": "drill/漢字練習(小1).pdf" }
           ]
-        },
+        }
+      ]
+     },
       "subjects": [
         {
           "name": "英語",
