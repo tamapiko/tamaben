@@ -1,1 +1,26 @@
-
+{
+  "grades": [
+    {
+      "name": "小学4年生",
+      "subjects": [
+        {
+          "name": "英語",
+          "units": [
+            { "name": "英単語(月)", "file": "drill/英単語(月).pdf" }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "中学2年生",
+      "subjects": [
+        {
+          "name": "数学",
+          "units": [
+            { "name": "連立方程式", "file": "drill/連立方程式.pdf" }
+          ]
+        }
+      ]
+    }
+  ]
+}
