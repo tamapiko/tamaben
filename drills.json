@@ -9,12 +9,6 @@
             { "name": "漢字練習(小1)", "file": "drill/漢字練習(小1).pdf" }
           ]
         },
-        {
-          "name": "英語",
-          "units": [
-            { "name": "英単語(月)", "file": "drill/英単語(月).pdf" }
-          ]
-        }
       ]
     },
     {
@@ -24,6 +18,17 @@
           "name": "英語",
           "units": [
             { "name": "英単語(月)", "file": "drill/英単語(月).pdf" }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "中学1年生",
+      "subjects": [
+        {
+          "name": "数学",
+          "units": [
+            { "name": "正負の数", "file": "drill/正負の数.pdf" }
           ]
         }
       ]
