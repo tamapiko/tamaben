@@ -1,5 +1,22 @@
 {
   "grades": [
+     {
+      "name": "小学1年生",
+        "subjects": [
+        {
+          "name": "国語",
+          "units": [
+            { "name": "漢字練習(小1)", "file": "drill/漢字練習(小1).pdf" }
+          ]
+      "subjects": [
+        {
+          "name": "英語",
+          "units": [
+            { "name": "英単語(月)", "file": "drill/英単語(月).pdf" }
+          ]
+        }
+      ]
+    },
     {
       "name": "小学4年生",
       "subjects": [
