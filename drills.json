@@ -1,17 +1,14 @@
 {
   "grades": [
-     {
+    {
       "name": "小学1年生",
-        "subjects": [
+      "subjects": [
         {
           "name": "国語",
           "units": [
             { "name": "漢字練習(小1)", "file": "drill/漢字練習(小1).pdf" }
           ]
-        }
-      ]
-     },
-      "subjects": [
+        },
         {
           "name": "英語",
           "units": [
