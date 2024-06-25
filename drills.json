@@ -17,7 +17,7 @@
         {
           "name": "英語",
           "units": [
-            { "name": "英単語(月)", "file": "drill/英単語(月).pdf" }
+            { "name": "英単語(月)", "file": "drill/英単語(月).pdf" }, { "name": "英単語(曜日)", "file": "drill/英単語(曜日).pdf" }
           ]
         }
       ]
