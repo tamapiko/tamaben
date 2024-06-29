@@ -42,6 +42,10 @@
             { "name": "連立方程式", "file": "drill/連立方程式.pdf" }
           ]
         }
+        {
+          "name": "社会",
+          "units": [
+            { "name": "中国・四国地方", "file": "drill/中国・四国地方.pdf" }
       ]
     }
   ]
