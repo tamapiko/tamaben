@@ -22,6 +22,17 @@
         }
       ]
     },
+        {
+      "name": "小学1年生",
+      "subjects": [
+        {
+          "name": "算数",
+          "units": [
+            { "name": "平均の求め方", "file": "drill/平均の求め方.pdf" }
+          ]
+        }
+      ]
+    },
     {
       "name": "中学1年生",
       "subjects": [
