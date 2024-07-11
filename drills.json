@@ -41,6 +41,12 @@
           "units": [
             { "name": "正負の数", "file": "drill/正負の数.pdf" }
           ]
+        },
+        {
+          "name": "英語",
+          "units": [
+            { "name": "筆記体", "file": "drill/筆記体.pdf" }
+          ]
         }
       ]
     },
