@@ -3,65 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>タマベンドリルプリント作成システム</title>
+    <title>プリント作成システム</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>タマベンドリルプリント作成システム</h1>
-
-    <!-- プリントサイズの選択 -->
-    <div id="size-selection">
-        <label for="size-select">プリントサイズを選択:</label>
+    <div id="controls">
         <select id="size-select">
-            <option value="B5">B5</option>
             <option value="A4">A4</option>
+            <option value="B5">B5</option>
             <option value="A3">A3</option>
         </select>
-    </div>
-
-    <!-- 教科と単元の選択 -->
-    <div id="controls">
-        <label for="subject-select">教科:</label>
+        <select id="orientation-select">
+            <option value="portrait">縦向き</option>
+            <option value="landscape">横向き</option>
+        </select>
         <select id="subject-select">
             <option value="math">数学</option>
             <option value="japanese">国語</option>
             <option value="english">英語</option>
-            <option value="science">理科</option>
+            <option value="science">科学</option>
             <option value="social-studies">社会</option>
         </select>
-
-        <label for="unit-select">単元:</label>
-        <select id="unit-select">
-            <!-- 単元は教科選択時に動的に追加されます -->
-        </select>
-
-        <button id="generate-problems">問題を生成</button>
+        <select id="unit-select"></select>
+        <button id="generate-problems">問題生成</button>
+        <button id="add-text"><img src="text-icon.png" alt="テキスト追加"> テキスト追加</button>
+        <button id="add-image"><img src="image-icon.png" alt="画像追加"> 画像追加</button>
+        <button id="add-shape"><img src="shape-icon.png" alt="図形追加"> 図形追加</button>
+        <button id="add-line"><img src="line-icon.png" alt="線追加"> 線追加</button>
+        <button id="save-pdf">PDF保存</button>
     </div>
-
-    <!-- 問題表示エリア -->
-    <div id="problems-container">
-        <!-- 生成された問題がここに表示される -->
+    <div id="pdf-editor">
+        <canvas id="pdf-canvas"></canvas>
     </div>
-
-    <!-- テキスト編集エリア -->
-    <div id="text-editor">
-        <input type="text" id="text-input" placeholder="テキストを入力">
-        <select id="font-select">
-            <option value="Arial">英語 (Arial)</option>
-            <option value="'STIX Two Text'">数学 (STIX Two Text)</option>
-            <option value="'Noto Sans JP'">漢字 (Noto Sans JP)</option>
-        </select>
-        <input type="color" id="color-input" value="#000000">
-        <input type="number" id="font-size-input" value="16" min="10" max="36">
-        <button id="add-text">テキストを追加</button>
-        <button id="add-image">画像を追加</button>
-    </div>
-
-    <canvas id="pdf-canvas"></canvas>
-    <button id="save-pdf">PDFを保存</button>
-
-    <script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
     <script src="editor.js"></script>
 </body>
 </html>
