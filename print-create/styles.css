@@ -1,93 +1,31 @@
-/* 全体のスタイル */
 body {
     font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f4;
 }
 
-/* ヘッダー */
-h1 {
-    text-align: center;
-    color: #333;
-    margin-top: 20px;
-}
-
-/* プリントサイズ選択 */
-#size-selection {
-    text-align: center;
-    margin: 20px;
-}
-
-#size-select {
-    padding: 10px;
-    font-size: 16px;
-}
-
-/* コントロールエリア */
 #controls {
-    text-align: center;
-    margin: 20px;
+    margin-bottom: 20px;
 }
 
-#subject-select, #unit-select, #generate-problems {
-    padding: 10px;
-    font-size: 16px;
+select, button {
     margin: 5px;
 }
 
-/* 問題表示エリア */
-#problems-container {
-    text-align: center;
-    margin: 20px;
-}
-
-/* テキスト編集エリア */
-#text-editor {
-    text-align: center;
-    margin: 20px;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-#text-editor input[type="text"], 
-#text-editor select, 
-#text-editor input[type="color"], 
-#text-editor input[type="number"], 
-#text-editor button {
+button {
     padding: 10px;
-    font-size: 16px;
-    margin: 5px;
-}
-
-#text-editor input[type="text"] {
-    width: 300px;
-}
-
-/* PDFキャンバス */
-#pdf-canvas {
-    border: 1px solid #ccc;
-    margin: 20px auto;
-    display: block;
-    max-width: 100%;
-}
-
-/* 保存ボタン */
-#save-pdf {
-    display: block;
-    width: 200px;
-    padding: 10px;
-    margin: 20px auto;
-    font-size: 16px;
-    background-color: #007BFF;
-    color: #fff;
     border: none;
-    border-radius: 5px;
     cursor: pointer;
 }
 
-#save-pdf:hover {
-    background-color: #0056b3;
+button img {
+    width: 16px;
+    height: 16px;
+    vertical-align: middle;
+}
+
+#pdf-editor {
+    position: relative;
+}
+
+#pdf-canvas {
+    border: 1px solid #ccc;
 }
