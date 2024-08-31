@@ -1,4 +1,10 @@
-// PDFサイズの選択に基づいてキャンバスサイズを設定
+// ページが読み込まれたときにサイズ選択を設定
+window.addEventListener('load', () => {
+    const sizeSelect = document.getElementById('size-select');
+    sizeSelect.dispatchEvent(new Event('change')); // 初期サイズ設定
+});
+
+// サイズ変更に応じてキャンバスサイズを設定
 document.getElementById('size-select').addEventListener('change', () => {
     const size = document.getElementById('size-select').value;
     const canvas = document.getElementById('pdf-canvas');
@@ -22,18 +28,20 @@ document.getElementById('subject-select').addEventListener('change', () => {
     
     unitSelect.innerHTML = ''; // 既存の単元をクリア
 
-    if (subject === 'math') {
-        addUnitOptions(['四則演算', '方程式', '幾何', '関数', '確率と統計']);
-    } else if (subject === 'japanese') {
-        addUnitOptions(['漢字', '文法', '読解', '古文', '言葉の意味']);
-    } else if (subject === 'english') {
-        addUnitOptions(['語彙', '文法', 'リーディング', 'ライティング', 'リスニング']);
-    } else if (subject === 'science') {
-        addUnitOptions(['物理', '化学', '生物', '地学', '環境科学']);
-    } else if (subject === 'social-studies') {
-        addUnitOptions(['歴史', '地理', '公民', '経済', '政治']);
-    }
+    const units = getUnits(subject);
+    addUnitOptions(units);
 });
+
+function getUnits(subject) {
+    switch (subject) {
+        case 'math': return ['四則演算', '方程式', '幾何', '関数', '確率と統計', '数列', 'ベクトル', '行列'];
+        case 'japanese': return ['漢字', '文法', '読解', '古文', '言葉の意味', '詩歌', '故事成語', '作文'];
+        case 'english': return ['語彙', '文法', 'リーディング', 'ライティング', 'リスニング', '発音', '会話', '英作文'];
+        case 'science': return ['物理', '化学', '生物', '地学', '環境科学', 'エネルギー', '光学', '化学反応'];
+        case 'social-studies': return ['歴史', '地理', '公民', '経済', '政治', '国際関係', '文化', '社会問題'];
+        default: return [];
+    }
+}
 
 function addUnitOptions(units) {
     const unitSelect = document.getElementById('unit-select');
@@ -62,21 +70,27 @@ document.getElementById('generate-problems').addEventListener('click', () => {
     });
 });
 
-// 各単元に対して15パターンの問題を生成する関数
+// 事前に用意した問題を選択して生成
 function generateProblems(subject, unit) {
-    const problems = [];
-    if (subject === 'math') {
-        if (unit === '四則演算') {
-            problems.push('5 + 3 = ?', '10 - 2 = ?', /* ... 15パターンの問題 */);
-        } else if (unit === '方程式') {
-            problems.push('x + 5 = 10 の解は？', '2x - 4 = 6 の解は？', /* ... 15パターンの問題 */);
-        }
-        // 他の単元も同様に追加
-    }
-    // 他の教科の問題生成も同様に追加
-    return problems;
+    const predefinedProblems = {
+        'math': {
+            '四則演算': [
+                '5 + 3 = ?', '10 - 2 = ?', /* ... 15個の問題 */
+            ],
+            '方程式': [
+                'x + 5 = 10 の解は？', '2x - 4 = 6 の解は？', /* ...
+
+ 15個の問題 */
+            ],
+            // 他の単元の問題も追加
+        },
+        // 他の教科の問題も追加
+    };
+
+    return predefinedProblems[subject][unit] || [];
 }
 
+// テキストの追加
 document.getElementById('add-text').addEventListener('click', () => {
     const text = document.getElementById('text-input').value;
     const font = document.getElementById('font-select').value;
@@ -88,6 +102,33 @@ document.getElementById('add-text').addEventListener('click', () => {
     context.font = `${fontSize}px ${font}`;
     context.fillStyle = color;
     context.fillText(text, 50, 50); // テキストの位置は調整してください
+});
+
+// 画像の追加
+document.getElementById('add-image').addEventListener('click', () => {
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = 'image/*';
+
+    fileInput.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        const reader = new FileReader();
+        
+        reader.onload = () => {
+            const image = new Image();
+            image.src = reader.result;
+            
+            image.onload = () => {
+                const canvas = document.getElementById('pdf-canvas');
+                const context = canvas.getContext('2d');
+                context.drawImage(image, 100, 100); // 画像の位置は調整してください
+            };
+        };
+
+        reader.readAsDataURL(file);
+    });
+
+    fileInput.click();
 });
 
 // PDFの保存
