@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>タマベンドリルプリント作成システム</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>タマベンドリルプリント作成システム</h1>
+
+    <!-- プリントサイズの選択 -->
+    <div id="size-selection">
+        <label for="size-select">プリントサイズを選択:</label>
+        <select id="size-select">
+            <option value="B5">B5</option>
+            <option value="A4">A4</option>
+            <option value="A3">A3</option>
+        </select>
+    </div>
+
+    <!-- 教科と単元の選択 -->
+    <div id="controls">
+        <label for="subject-select">教科:</label>
+        <select id="subject-select">
+            <option value="math">数学</option>
+            <option value="japanese">国語</option>
+            <option value="english">英語</option>
+            <option value="science">理科</option>
+            <option value="social-studies">社会</option>
+        </select>
+
+        <label for="unit-select">単元:</label>
+        <select id="unit-select">
+            <!-- 単元は教科選択時に動的に追加されます -->
+        </select>
+
+        <button id="generate-problems">問題を生成</button>
+    </div>
+
+    <!-- 問題表示エリア -->
+    <div id="problems-container">
+        <!-- 生成された問題がここに表示される -->
+    </div>
+    
+    <button id="save-pdf">PDFを保存</button>
+    
+    <canvas id="pdf-canvas"></canvas>
+
+    <!-- テキスト編集エリア -->
+    <div id="text-editor">
+        <input type="text" id="text-input" placeholder="テキストを入力">
+        <select id="font-select">
+            <option value="Arial">英語 (Arial)</option>
+            <option value="'STIX Two Text'">数学 (STIX Two Text)</option>
+            <option value="'Noto Sans JP'">漢字 (Noto Sans JP)</option>
+        </select>
+        <input type="color" id="color-input" value="#000000">
+        <input type="number" id="font-size-input" value="16" min="10" max="36">
+        <button id="add-text">テキストを追加</button>
+    </div>
+
+    <script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <script src="editor.js"></script>
+</body>
+</html>
