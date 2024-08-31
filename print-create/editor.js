@@ -1,24 +1,53 @@
-// ページが読み込まれたときにサイズ選択を設定
+// サイズ選択時のテロップと初期設定
 window.addEventListener('load', () => {
     const sizeSelect = document.getElementById('size-select');
+    const orientationSelect = document.getElementById('orientation-select');
+    const canvas = document.getElementById('pdf-canvas');
+    const context = canvas.getContext('2d');
+
     sizeSelect.dispatchEvent(new Event('change')); // 初期サイズ設定
+    orientationSelect.dispatchEvent(new Event('change')); // 初期向き設定
 });
 
-// サイズ変更に応じてキャンバスサイズを設定
 document.getElementById('size-select').addEventListener('change', () => {
     const size = document.getElementById('size-select').value;
+    const orientation = document.getElementById('orientation-select').value;
     const canvas = document.getElementById('pdf-canvas');
 
+    let width, height;
     if (size === 'B5') {
-        canvas.width = 500;
-        canvas.height = 707;
+        width = 500;
+        height = 707;
     } else if (size === 'A4') {
-        canvas.width = 595;
-        canvas.height = 842;
+        width = 595;
+        height = 842;
     } else if (size === 'A3') {
-        canvas.width = 842;
-        canvas.height = 1191;
+        width = 842;
+        height = 1191;
     }
+
+    if (orientation === 'landscape') {
+        canvas.width = height;
+        canvas.height = width;
+    } else {
+        canvas.width = width;
+        canvas.height = height;
+    }
+
+    const tooltip = document.createElement('div');
+    tooltip.textContent = `サイズ: ${size}, 向き: ${orientation}`;
+    tooltip.style.position = 'absolute';
+    tooltip.style.top = '10px';
+    tooltip.style.left = '10px';
+    tooltip.style.backgroundColor = 'rgba(0,0,0,0.5)';
+    tooltip.style.color = 'white';
+    tooltip.style.padding = '5px';
+    tooltip.style.borderRadius = '3px';
+    document.body.appendChild(tooltip);
+    
+    setTimeout(() => {
+        document.body.removeChild(tooltip);
+    }, 3000);
 });
 
 // 教科に基づいて単元を選択肢に追加
@@ -78,9 +107,7 @@ function generateProblems(subject, unit) {
                 '5 + 3 = ?', '10 - 2 = ?', /* ... 15個の問題 */
             ],
             '方程式': [
-                'x + 5 = 10 の解は？', '2x - 4 = 6 の解は？', /* ...
-
- 15個の問題 */
+                'x + 5 = 10 の解は？', '2x - 4 = 6 の解は？', /* ... 15個の問題 */
             ],
             // 他の単元の問題も追加
         },
@@ -92,16 +119,19 @@ function generateProblems(subject, unit) {
 
 // テキストの追加
 document.getElementById('add-text').addEventListener('click', () => {
-    const text = document.getElementById('text-input').value;
-    const font = document.getElementById('font-select').value;
-    const color = document.getElementById('color-input').value;
-    const fontSize = document.getElementById('font-size-input').value;
+    const text = prompt("追加するテキストを入力してください:");
+    const font = prompt("フォントを入力してください:");
+    const color = prompt("色を入力してください:");
+    const fontSize = prompt("フォントサイズを入力してください（例: 20px）:");
+    const x = prompt("テキストのX座標を入力してください:");
+    const y = prompt("テキストのY座標を入力してください:");
+
     const canvas = document.getElementById('pdf-canvas');
     const context = canvas.getContext('2d');
 
-    context.font = `${fontSize}px ${font}`;
+    context.font = `${fontSize} ${font}`;
     context.fillStyle = color;
-    context.fillText(text, 50, 50); // テキストの位置は調整してください
+    context.fillText(text, x, y);
 });
 
 // 画像の追加
@@ -117,41 +147,63 @@ document.getElementById('add-image').addEventListener('click', () => {
         reader.onload = () => {
             const image = new Image();
             image.src = reader.result;
-            
+
             image.onload = () => {
                 const canvas = document.getElementById('pdf-canvas');
                 const context = canvas.getContext('2d');
-                context.drawImage(image, 100, 100); // 画像の位置は調整してください
+                
+                const x = 100; // X座標
+                const y = 
+
+100; // Y座標
+                context.drawImage(image, x, y);
             };
         };
-
         reader.readAsDataURL(file);
     });
 
     fileInput.click();
 });
 
-// PDFの保存
-document.getElementById('save-pdf').addEventListener('click', async () => {
+// 図形の追加
+document.getElementById('add-shape').addEventListener('click', () => {
+    const shape = prompt("追加する図形を入力してください（例: 'circle' または 'rectangle'）:");
+    const x = parseInt(prompt("図形のX座標を入力してください:"), 10);
+    const y = parseInt(prompt("図形のY座標を入力してください:"), 10);
+    const width = parseInt(prompt("図形の幅を入力してください:"), 10);
+    const height = parseInt(prompt("図形の高さを入力してください:"), 10);
+    const color = prompt("図形の色を入力してください:");
+
     const canvas = document.getElementById('pdf-canvas');
-    const pdfDoc = await PDFLib.PDFDocument.create();
-    const page = pdfDoc.addPage([canvas.width, canvas.height]);
+    const context = canvas.getContext('2d');
 
-    const pngImage = await pdfDoc.embedPng(canvas.toDataURL('image/png'));
-    page.drawImage(pngImage, {
-        x: 0,
-        y: 0,
-        width: canvas.width,
-        height: canvas.height,
-    });
+    context.fillStyle = color;
 
-    const pdfBytes = await pdfDoc.save();
-    const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-    const url = URL.createObjectURL(blob);
+    if (shape === 'circle') {
+        context.beginPath();
+        context.arc(x, y, width, 0, 2 * Math.PI);
+        context.fill();
+    } else if (shape === 'rectangle') {
+        context.fillRect(x, y, width, height);
+    }
+});
 
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'print.pdf';
-    a.click();
-    URL.revokeObjectURL(url);
+// 線の追加
+document.getElementById('add-line').addEventListener('click', () => {
+    const x1 = parseInt(prompt("線の始点X座標を入力してください:"), 10);
+    const y1 = parseInt(prompt("線の始点Y座標を入力してください:"), 10);
+    const x2 = parseInt(prompt("線の終点X座標を入力してください:"), 10);
+    const y2 = parseInt(prompt("線の終点Y座標を入力してください:"), 10);
+    const color = prompt("線の色を入力してください:");
+    const lineWidth = parseInt(prompt("線の太さを入力してください:"), 10);
+
+    const canvas = document.getElementById('pdf-canvas');
+    const context = canvas.getContext('2d');
+
+    context.strokeStyle = color;
+    context.lineWidth = lineWidth;
+    context.beginPath();
+    context.moveTo(x1, y1);
+    context.lineTo(x2, y2);
+    context.stroke();
 });
