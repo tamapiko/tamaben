@@ -1,72 +1,42 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PDF編集ツール</title>
+    <title>PDF Editor</title>
     <link rel="stylesheet" href="styles.css">
-    <!-- アイコンフォントのリンク -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <!-- サイズと向き選択テロップ -->
-    <div id="size-modal">
+    <div id="size-modal" class="modal">
         <div class="modal-content">
-            <h2>サイズと向きを選択してください</h2>
-            <div class="button-group">
-                <button class="select-button" onclick="selectSize('A4', 'portrait')">
-                    <i class="fas fa-file-alt"></i>A4 縦
-                </button>
-                <button class="select-button" onclick="selectSize('A4', 'landscape')">
-                    <i class="fas fa-file-alt fa-rotate-90"></i>A4 横
-                </button>
-                <button class="select-button" onclick="selectSize('B5', 'portrait')">
-                    <i class="fas fa-file-alt"></i>B5 縦
-                </button>
-                <button class="select-button" onclick="selectSize('B5', 'landscape')">
-                    <i class="fas fa-file-alt fa-rotate-90"></i>B5 横
-                </button>
-                <!-- 他のサイズ選択ボタン -->
-            </div>
+            <h2>サイズと向きの選択</h2>
+            <label for="size-select">サイズ:</label>
+            <select id="size-select">
+                <option value="A4_portrait">A4 縦向き</option>
+                <option value="A4_landscape">A4 横向き</option>
+                <option value="B5_portrait">B5 縦向き</option>
+                <option value="B5_landscape">B5 横向き</option>
+            </select>
+            <button onclick="selectSize()">選択</button>
         </div>
     </div>
 
-    <!-- 編集画面 -->
     <div id="editor-container" style="display: none;">
-        <!-- 拡大・縮小ボタン -->
-        <div id="zoom-controls">
-            <button onclick="zoomIn()"><i class="fas fa-search-plus"></i> 拡大</button>
-            <button onclick="zoomOut()"><i class="fas fa-search-minus"></i> 縮小</button>
+        <div id="toolbar">
+            <button id="add-text"><i class="fas fa-text"></i> テキスト</button>
+            <button id="add-shape"><i class="fas fa-shapes"></i> 図形</button>
+            <button id="zoom-in"><i class="fas fa-search-plus"></i> ズームイン</button>
+            <button id="zoom-out"><i class="fas fa-search-minus"></i> ズームアウト</button>
+            <button id="load-pdf"><i class="fas fa-file-pdf"></i> PDFを読み込み</button>
         </div>
-
-        <!-- PDF再編集ボタン -->
-        <div id="reupload-pdf">
-            <input type="file" id="pdf-upload" accept=".pdf">
-            <button onclick="loadPDF()"><i class="fas fa-upload"></i> PDF再編集</button>
-        </div>
-
-        <!-- スマホ向けUI -->
-        <div id="mobile-ui" class="ui-bar">
-            <button id="add-text" class="ui-button"><i class="fas fa-font"></i> テキスト</button>
-            <button id="add-image" class="ui-button"><i class="fas fa-image"></i> 画像</button>
-            <button id="add-shape" class="ui-button"><i class="fas fa-square"></i> 図形</button>
-            <button id="add-line" class="ui-button"><i class="fas fa-minus"></i> 線</button>
-        </div>
-
-        <!-- PDF編集エリア -->
-        <div id="pdf-editor">
+        <div id="pdf-editor" class="editor">
             <canvas id="pdf-canvas"></canvas>
         </div>
-
-        <!-- パソコン向けUI -->
-        <div id="desktop-ui" class="ui-bar">
-            <button id="add-text" class="ui-button"><i class="fas fa-font"></i> テキスト</button>
-            <button id="add-image" class="ui-button"><i class="fas fa-image"></i> 画像</button>
-            <button id="add-shape" class="ui-button"><i class="fas fa-square"></i> 図形</button>
-            <button id="add-line" class="ui-button"><i class="fas fa-minus"></i> 線</button>
-        </div>
     </div>
 
-    <script src="script.js"></script>
+    <input type="file" id="pdf-upload" style="display: none;">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
+    <script src="scripts.js"></script>
 </body>
 </html>
