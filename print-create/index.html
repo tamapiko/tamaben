@@ -3,39 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>プリント作成システム</title>
+    <title>PDF編集ツール</title>
     <link rel="stylesheet" href="styles.css">
+    <!-- アイコンフォントのリンク -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <div id="controls">
-        <select id="size-select">
-            <option value="A4">A4</option>
-            <option value="B5">B5</option>
-            <option value="A3">A3</option>
-        </select>
-        <select id="orientation-select">
-            <option value="portrait">縦向き</option>
-            <option value="landscape">横向き</option>
-        </select>
-        <select id="subject-select">
-            <option value="math">数学</option>
-            <option value="japanese">国語</option>
-            <option value="english">英語</option>
-            <option value="science">科学</option>
-            <option value="social-studies">社会</option>
-        </select>
-        <select id="unit-select"></select>
-        <button id="generate-problems">問題生成</button>
-        <button id="add-text"><img src="text-icon.png" alt="テキスト追加"> テキスト追加</button>
-        <button id="add-image"><img src="image-icon.png" alt="画像追加"> 画像追加</button>
-        <button id="add-shape"><img src="shape-icon.png" alt="図形追加"> 図形追加</button>
-        <button id="add-line"><img src="line-icon.png" alt="線追加"> 線追加</button>
-        <button id="save-pdf">PDF保存</button>
+    <!-- サイズと向き選択テロップ -->
+    <div id="size-modal">
+        <div class="modal-content">
+            <h2>サイズと向きを選択してください</h2>
+            <div class="button-group">
+                <button class="select-button" onclick="selectSize('A4', 'portrait')">
+                    <i class="fas fa-file-alt"></i>A4 縦
+                </button>
+                <button class="select-button" onclick="selectSize('A4', 'landscape')">
+                    <i class="fas fa-file-alt fa-rotate-90"></i>A4 横
+                </button>
+                <button class="select-button" onclick="selectSize('B5', 'portrait')">
+                    <i class="fas fa-file-alt"></i>B5 縦
+                </button>
+                <button class="select-button" onclick="selectSize('B5', 'landscape')">
+                    <i class="fas fa-file-alt fa-rotate-90"></i>B5 横
+                </button>
+                <!-- 他のサイズ選択ボタン -->
+            </div>
+        </div>
     </div>
-    <div id="pdf-editor">
-        <canvas id="pdf-canvas"></canvas>
+
+    <!-- 編集画面 -->
+    <div id="editor-container" style="display: none;">
+        <!-- 拡大・縮小ボタン -->
+        <div id="zoom-controls">
+            <button onclick="zoomIn()"><i class="fas fa-search-plus"></i> 拡大</button>
+            <button onclick="zoomOut()"><i class="fas fa-search-minus"></i> 縮小</button>
+        </div>
+
+        <!-- PDF再編集ボタン -->
+        <div id="reupload-pdf">
+            <input type="file" id="pdf-upload" accept=".pdf">
+            <button onclick="loadPDF()"><i class="fas fa-upload"></i> PDF再編集</button>
+        </div>
+
+        <!-- スマホ向けUI -->
+        <div id="mobile-ui" class="ui-bar">
+            <button id="add-text" class="ui-button"><i class="fas fa-font"></i> テキスト</button>
+            <button id="add-image" class="ui-button"><i class="fas fa-image"></i> 画像</button>
+            <button id="add-shape" class="ui-button"><i class="fas fa-square"></i> 図形</button>
+            <button id="add-line" class="ui-button"><i class="fas fa-minus"></i> 線</button>
+        </div>
+
+        <!-- PDF編集エリア -->
+        <div id="pdf-editor">
+            <canvas id="pdf-canvas"></canvas>
+        </div>
+
+        <!-- パソコン向けUI -->
+        <div id="desktop-ui" class="ui-bar">
+            <button id="add-text" class="ui-button"><i class="fas fa-font"></i> テキスト</button>
+            <button id="add-image" class="ui-button"><i class="fas fa-image"></i> 画像</button>
+            <button id="add-shape" class="ui-button"><i class="fas fa-square"></i> 図形</button>
+            <button id="add-line" class="ui-button"><i class="fas fa-minus"></i> 線</button>
+        </div>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
-    <script src="editor.js"></script>
+
+    <script src="script.js"></script>
 </body>
 </html>
