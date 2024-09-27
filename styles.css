@@ -8,4 +8,5 @@ body {
 .button-group {
     color:#182246;
     background-color:#aec0dd;
+    border-radius: 100vh;
 }
