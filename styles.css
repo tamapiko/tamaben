@@ -1,7 +1,11 @@
 body {
-    background-color:#89ccb0;
+    background-color:#f0f6ff;
 }
 .maintenance {
     font-family: arial;
     text-align: center;
+}
+botton {
+    color:#182246;
+    background-color:#aec0dd;
 }
