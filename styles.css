@@ -1,7 +1,18 @@
 body {
     background-color:#89ccb0;
 }
-mente {
-    font-color:White;
+.maintenance
+  font-family: arial;
+  font-size: 24px;
+  margin: 25px;
+  width: 350px;
+  height: 200px;
+  outline: dashed 1px black;
+}
+
+h1 {
+    text-align: center;
+}
+h3 {
     text-align: center;
 }
