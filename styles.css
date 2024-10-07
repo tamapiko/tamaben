@@ -5,7 +5,7 @@ body {
     font-family: arial;
     text-align: center;
 }
-.button-group {
+button {
     color:#182246;
     background-color:#aec0dd;
     border-radius: 100vh;
