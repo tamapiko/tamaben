@@ -3,7 +3,7 @@ body {
     font-family:"Zen Kurenaido";
 }
 img {
-    size:60px;
+    width:60%;
 }
 .maintenance{
   display:flex;
