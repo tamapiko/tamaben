@@ -8,7 +8,7 @@ body {
     size:60%;
 }
 .button-group {
-        background-color: #182246; /* ボタンの背景色 */
+        background-color: #aec0dd; /* ボタンの背景色 */
     color: #f0f6ff;               /* テキストの色 */
     border: none;               /* ボーダーなし */
     border-radius: 100%;        /* 角を丸くする */
