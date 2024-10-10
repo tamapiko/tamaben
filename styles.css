@@ -1,6 +1,9 @@
 body {
     background-color:#f0f6ff;
 }
+.maintenance{
+    text-align: center;
+}
 .button-group {
     background-color:#aec0dd;
     border-radius: 100%;
