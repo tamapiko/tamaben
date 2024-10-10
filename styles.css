@@ -6,7 +6,7 @@ body {
   flex-flow: column;
     size:60%;
 }
-.grade-group {
+.button-group {
         background-color: #182246; /* ボタンの背景色 */
     color: #f0f6ff;               /* テキストの色 */
     border: none;               /* ボーダーなし */
