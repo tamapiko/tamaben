@@ -4,6 +4,9 @@ body {
 .maintenance{
   display:flex;
   flex-flow: column;
+    img{
+        size:60%;
+    }
 }
 .button-group {
     background-color:#aec0dd;
