@@ -7,21 +7,11 @@ body {
     size:60%;
 }
 .button-group {
-    background-color:#aec0dd;
-width: 100%;
-  height: 50px;
-  position: relative;
-  background: #aec0dd;
-  border: 1px solid #aec0dd
-  border-radius: 30px;
-  box-sizing: border-box;
-  padding: 0 45px 0 25px;
+  border: 0;
+  line-height: 2.5;
+  padding: 0 20px;
+  font-size: 1rem;
+  text-align: center;
   color: #f0f6ff;
-  font-size: 16px;
-  letter-spacing: 0.1em;
-  line-height: 1.3;
-  text-align: left;
-  text-decoration: none;
-  transition-duration: 0.3s;
 }
  
