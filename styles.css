@@ -2,8 +2,8 @@ body {
     background-color:#f0f6ff;
 }
 .maintenance{
-  display: flex;
-  align-items: center;
+  display:flex;
+  flex-flow: column;
 }
 .button-group {
     background-color:#aec0dd;
