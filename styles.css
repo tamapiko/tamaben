@@ -2,6 +2,9 @@ body {
     background-color:#f0f6ff;
     font-family:"Zen Kurenaido";
 }
+img {
+    size:60px;
+}
 .maintenance{
   display:flex;
   flex-flow: column;
