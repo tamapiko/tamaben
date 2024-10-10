@@ -4,6 +4,7 @@ body {
 }
 img {
     width:60%;
+    text-align: center
 }
 .maintenance{
   display:flex;
