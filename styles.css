@@ -15,7 +15,7 @@ button {
     background: #aec0dd;
     border-radius: 9999px;
     position: relative;
-    display: flex;
+      float: left;
     justify-content: space-around;
     align-items: center;
     margin: 0 auto;
