@@ -11,7 +11,19 @@ img {
   flex-flow: column;
 }
 button {
-        background-color: #aec0dd;
-    color: #f0f6ff;
     margin-bottom: 10px; 
+    background: #aec0dd;
+    border-radius: 9999px;
+    position: relative;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin: 0 auto;
+    max-width: 250px;
+    padding: 10px 25px;
+    color: #f0f6ff;
+    line-height: 1.8;
+    text-decoration: none;
+    transition: 0.3s ease-in-out;
+    font-weight: 500;
 }
