@@ -5,10 +5,12 @@ body {
 img {
     width:60%;
     text-align:center;
+    flex-flow: column;
 }
 .maintenance{
   display:flex;
-  flex-flow: column;
+    text-align:center;
+    flex-flow: column;
 }
 button {
     margin-bottom: 10px; 
