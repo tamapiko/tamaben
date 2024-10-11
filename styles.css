@@ -10,7 +10,7 @@ img {
   display:flex;
   flex-flow: column;
 }
-.button-group {
+#grade-buttons {
         background-color: #aec0dd;
     color: #f0f6ff;
     width:200px;
