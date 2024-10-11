@@ -2,6 +2,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const page = document.body.dataset.page;
 
     switch (page) {
+            case 'kind':
+            loadGrades();
+            break;
         case 'grade':
             loadGrades();
             break;
@@ -21,16 +24,36 @@ function loadGrades() {
     fetch('drills.json')
         .then(response => response.json())
         .then(data => {
+            const gradeButtonsContainer = document.getElementById('kind-buttons');
+            data.grades.forEach(kind => {
+                const button = document.createElement('button');
+                button.textContent = kind.name;
+                button.addEventListener('click', () => {
+                    localStorage.setItem('selectedKind', JSON.stringify(kind));
+                    window.location.href = 'kind.html';
+                });
+                gradeButtonsContainer.appendChild(button);
+            });
             const gradeButtonsContainer = document.getElementById('grade-buttons');
             data.grades.forEach(grade => {
                 const button = document.createElement('button');
                 button.textContent = grade.name;
                 button.addEventListener('click', () => {
                     localStorage.setItem('selectedGrade', JSON.stringify(grade));
-                    window.location.href = 'subject.html';
+                    window.location.href = 'grade.html';
                 });
                 gradeButtonsContainer.appendChild(button);
             });
+             const subjectButtonsContainer = document.getElementById('subject-buttons');
+    selectedGrade.subjects.forEach(subject => {
+        const button = document.createElement('button');
+        button.textContent = subject.name;
+        button.addEventListener('click', () => {
+            localStorage.setItem('selectedSubject', JSON.stringify(subject));
+            window.location.href = 'unit.html';
+        });
+        subjectButtonsContainer.appendChild(button);
+    });
         })
         .catch(error => console.error('Error loading drills data:', error));
 }
