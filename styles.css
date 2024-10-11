@@ -12,7 +12,7 @@ img {
 }
 button {
     margin-bottom: 10px; 
-    background: #aec0dd;
+    background: #aec0dd; /* 初期の背景色 */
     border-radius: 9999px;
     position: relative;
     float: left;
@@ -24,6 +24,10 @@ button {
     color: #f0f6ff;
     line-height: 1.8;
     text-decoration: none;
-    transition: 0.3s ease-in-out;
+    transition: 0.3s ease-in-out; /* トランジション */
     font-weight: 500;
+}
+
+button:hover {
+    background: #8fa3b8; /* ホバー時の背景色 */
 }
