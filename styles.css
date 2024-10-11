@@ -10,7 +10,6 @@ img {
 .maintenance{
   display:flex;
     text-align: center;
-    flex-flow: column;
 }
 button {
     margin-bottom: 10px; 
