@@ -13,6 +13,5 @@ img {
 button {
         background-color: #aec0dd;
     color: #f0f6ff;
-    width:200px;
-    height:100px;
+    margin-bottom: 10px; 
 }
