@@ -36,5 +36,5 @@ button:hover {
 }
 
 .sample img {
-    Filter: drop-shadow (16px 16px 20px rgba (000, 000, 000, 0.8));
+    Filter: drop-shadow (0px 0px 0px rgba (000, 000, 000, 0.8));
 }
