@@ -22,6 +22,7 @@ button {
     justify-content: center;
     align-items: center;
     margin: 0 auto;
+    width: 100%; /* 幅を100%にしてボタンを整列 */
     max-width: 240px;
     padding: 10px 25px;
     color: #003067;
@@ -29,7 +30,7 @@ button {
     font-weight: 600;
     border: 2px solid #000;
     z-index: 1;
-    border-radius: 5px;
+    box-sizing: border-box;
 }
 
 button:before {
@@ -71,8 +72,9 @@ button:hover:after {
 /* グリッドレイアウト */
 .button-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* 2列に設定 */
-    grid-template-rows: repeat(3, auto);   /* 3行に設定 */
-    gap: 20px; /* ボタン間のスペース（横・縦） */
+    grid-template-columns: repeat(2, 1fr); /* 横2列 */
+    grid-template-rows: repeat(3, auto);   /* 縦3行 */
+    gap: 20px; /* ボタンの間隔 */
     justify-items: center; /* 中央寄せ */
+    width: 100%; /* グリッド全体の幅 */
 }
