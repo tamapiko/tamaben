@@ -13,23 +13,60 @@ img {
     flex-flow: column;
     text-align: center;
 }
+/* solid012 */
 button {
-    margin-bottom: 20px; 
-    background: #aec0dd; /* 初期の背景色 */
-    border-radius: 9999px;
+    background: #6bb6ff;
+    border-radius: 5px;
     position: relative;
-    float: left;
-    justify-content: space-around;
+    display: flex;
+    justify-content: center;
     align-items: center;
     margin: 0 auto;
-    max-width: 250px;
+    max-width: 240px;
     padding: 10px 25px;
-    color:#182246;
-    line-height: 1.8;
-    text-decoration: none;
-    transition: 0.3s ease-in-out; /* トランジション */
-    font-weight: 500;
+    color: #003067;
+    transition: 0.3s ease-in-out;
+    font-weight: 600;
+    border: 2px solid #000;
+    z-index: 1;
+    border-radius: 5px;
 }
-.sample img {
-    Filter: drop-shadow (0px 0px 0px rgba (000, 000, 000, 0.8));
+button:before {
+    content: "";
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background: #6bb6ff;
+    z-index: -1;
+    border: 2px solid #000;
+    border-radius: 5px;
+}
+button:after {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    content: '';
+    -webkit-transition: all .3s;
+    transition: all .3s;
+    -webkit-transform: translate3d(0,0.40rem,-1rem);
+    transform: translate3d(0,0.40rem,-1rem);
+    border: 2px solid #000;
+    border-radius: inherit;
+    background: #2b7fde;
+    -webkit-box-shadow: 0 0.6rem 0 0 rgb(0 0 0 / 20%);
+    box-shadow: 0 0.4rem 0 0 rgb(0 0 0 / 20%);
+    z-index: -2;
+}
+button i {
+    position: absolute;
+    right: 9px;
+}
+button:hover {
+    transform: translate3d(0,0.2rem,-1rem);
+}
+button:hover:after {
+    transform: translate3d(0,0.2rem,-1rem);
+    box-shadow: 0 0.2rem 0 0 rgb(0 0 0 / 20%);
 }
