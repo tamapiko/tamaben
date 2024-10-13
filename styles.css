@@ -30,11 +30,6 @@ button {
     transition: 0.3s ease-in-out; /* トランジション */
     font-weight: 500;
 }
-
-button:hover {
-    background: #8fa3b8; /* ホバー時の背景色 */
-}
-
 .sample img {
     Filter: drop-shadow (0px 0px 0px rgba (000, 000, 000, 0.8));
 }
