@@ -73,6 +73,6 @@ button:hover:after {
     display: grid;
     grid-template-columns: repeat(2, 1fr); /* 2列に設定 */
     grid-template-rows: repeat(3, auto);   /* 3行に設定 */
-    gap: 10px; /* ボタン間のスペース */
+    gap: 20px; /* ボタン間のスペース（横・縦） */
     justify-items: center; /* 中央寄せ */
 }
