@@ -34,3 +34,7 @@ button {
 button:hover {
     background: #8fa3b8; /* ホバー時の背景色 */
 }
+
+.sample img {
+    Filter: drop-shadow (16px 16px 20px rgba (000, 000, 000, 0.8));
+}
