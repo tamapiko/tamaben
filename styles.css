@@ -16,7 +16,7 @@ img {
 /* ボタンのスタイル */
 button {
     background: #6bb6ff;
-    border-radius: 5px;
+    border-radius: 20px; /* 角丸を強調 */
     position: relative;
     display: flex;
     justify-content: center;
@@ -41,7 +41,7 @@ button:before {
     background: #6bb6ff;
     z-index: -1;
     border: 2px solid #000;
-    border-radius: 5px;
+    border-radius: 20px; /* 角丸を強調 */
 }
 
 button:after {
@@ -54,7 +54,7 @@ button:after {
     transition: all .3s;
     transform: translate3d(0,0.40rem,-1rem);
     border: 2px solid #000;
-    border-radius: inherit;
+    border-radius: 20px; /* 角丸を強調 */
     background: #2b7fde;
     box-shadow: 0 0.4rem 0 0 rgb(0 0 0 / 20%);
     z-index: -2;
