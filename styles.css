@@ -1,7 +1,7 @@
 body {
     background-color:#f0f6ff;
     font-family:"Zen Kurenaido";
-    font-color:#182246;
+    color:#182246;
 }
 img {
     width:50%;
@@ -24,7 +24,7 @@ button {
     margin: 0 auto;
     max-width: 250px;
     padding: 10px 25px;
-    color: #f0f6ff;
+    color:#182246;
     line-height: 1.8;
     text-decoration: none;
     transition: 0.3s ease-in-out; /* トランジション */
