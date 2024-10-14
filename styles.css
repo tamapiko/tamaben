@@ -3,6 +3,12 @@ body {
     font-family:"Zen Kurenaido";
     color:#182246;
 }
+.maintenance {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
 .maintenance img {
     width:50%;
     text-align:center;
