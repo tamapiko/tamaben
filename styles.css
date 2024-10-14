@@ -16,13 +16,14 @@ body {
 }
 .subject-txt {
     font-size:40px;
-    text-align: center;
+    text-align:center;
 }
 .subject {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction:column;  
+    text-align:center;
 }
 .kokugo , .suugaku , .eigo , .rika , .shakai {
     display: flex;
@@ -36,6 +37,7 @@ body {
     width:70%;
     filter: drop-shadow(10px 10px 20px rgba(0, 0, 0, 0.2));
     margin: 10px;
+    text-align:center;
 }
 }
 .button-container {
