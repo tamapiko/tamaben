@@ -23,6 +23,11 @@ body {
 .subject-txt {
     font-size:40px;
     text-align: center;
+    display:flex;
+}
+.kokugo , .suugaku , .eigo , .rika , .shakai {
+    display: flex;
+    justify-content: center;
 }
 .subject img {
     width:70%;
