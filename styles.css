@@ -16,7 +16,7 @@ img {
 button {
     border: solid 1px #182246; /* ボーダーを指定された色に設定 */
     border-radius: 50px; /* 角を丸める */
-    padding: 16px 20px; /* 上下16px、左右20pxの余白 */
+    padding: 8px 20px; /* 上下8px、左右20pxの余白 */
     text-align: center; /* テキストを中央に配置 */
     background-color: transparent; /* 背景色を透明に設定 */
     color: #182246; /* 文字色を指定された色に設定 */
