@@ -24,11 +24,12 @@ body {
     align-items: center;
     flex-direction:column;  
 }
-.kokugo , .suugaku , .eigo , .rika , .shakai a {
+.kokugo , .suugaku , .eigo , .rika , .shakai {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction:column;
+    text-align:center
     
 }
 .subject img {
