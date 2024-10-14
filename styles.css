@@ -18,8 +18,17 @@ body {
     font-size:60%;
     text-align: center;
 }
+.subject {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction:column;  
+}
 .kokugo , .suugaku , .eigo , .rika , .shakai {
-    text-align: center;
+        display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction:column;
     
 }
 .subject img {
