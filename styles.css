@@ -5,7 +5,7 @@ body {
 }
 .maintenance {
     display: flex;
-    flex-wrap: wrap;
+    grid-template-columns: repeat(2, 1fr);
     justify-content: center;
     align-items: center;
     height: 100vh;
