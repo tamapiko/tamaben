@@ -20,10 +20,8 @@ body {
     flex-flow: column;
     text-align: center;
 }
-.subject {
-    display: flex;
-    grid-template-columns: repeat(2, 1fr);
-    justify-content: center;
+.subject a {
+    font-size:40px;
 }
 .subject img {
     width:70%;
