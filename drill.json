@@ -1,1 +1,22 @@
+{
+    "schools": {
+        "elementary": {
+            "subjects": [
+              
+            ]
+        },
+        "middle": {
+            "subjects": [
+                {
+                    "name": "suugaku",
+                    "image": "renritu"
+                },
+            ]
+        },
+        "high": {
+            "subjects": [
 
+            ]
+        }
+    }
+}
