@@ -15,7 +15,8 @@ body {
 }
 .subject img {
     width:40%;
-    filter: drop-shadow(10px 10px 20px rgba(0, 0, 0, 0.2)); /* ドロップシャドウを追加 */
+    filter: drop-shadow(10px 10px 20px rgba(0, 0, 0, 0.2));
+    margin: 10px;
 }
 }
 .button-container {
