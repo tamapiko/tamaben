@@ -7,10 +7,9 @@
         },
         "middle": {
             "subjects": [
-                {
-                    "name": "suugaku",
-                    "image": "renritu"
-                },
+                {"name": "suugaku", "image": "renritu"},
+                {"name": "shakai", "image": "tyuugoku"},
+                {"name": "shakai", "image": "kinki"},
             ]
         },
         "high": {
