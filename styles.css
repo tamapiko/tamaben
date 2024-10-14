@@ -20,8 +20,9 @@ body {
     flex-flow: column;
     text-align: center;
 }
-.subject a {
+.subject-txt {
     font-size:40px;
+    text-align: center;
 }
 .subject img {
     width:70%;
