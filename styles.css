@@ -23,6 +23,7 @@ body {
 .subject {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
+    justify-content: center;
 }
 .subject img {
     width:70%;
