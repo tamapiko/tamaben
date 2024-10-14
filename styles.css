@@ -14,20 +14,27 @@ img {
     text-align: center;
 }
 button {
-    background-color: #4CAF50; /* 緑の背景色 */
-    border: none; /* ボーダーなし */
-    color: white; /* 文字色は白 */
-    padding: 15px 32px; /* 上下15px、左右32pxの余白 */
+    border: solid 1px #333; /* ボーダーを設定 */
+    border-radius: 50px; /* 角を丸める */
+    padding: 16px 10px 16px 20px; /* 上下16px、右10px、左20pxの余白 */
     text-align: center; /* テキストを中央に配置 */
-    text-decoration: none; /* テキストの下線なし */
-    display: inline-block; /* インラインブロック */
+    position: relative; /* 位置を相対的に */
+    background-color: transparent; /* 背景色は透明 */
+    color: #333; /* 文字色 */
     font-size: 16px; /* フォントサイズ */
-    margin: 4px 2px; /* マージンを設定 */
     cursor: pointer; /* カーソルをポインターに */
-    border-radius: 4px; /* 角を丸める */
-    transition: background-color 0.3s; /* 背景色の遷移効果 */
+    border: none; /* デフォルトのボーダーを無効に */
 }
 
-button:hover {
-    background-color: #45a049; /* ホバー時の背景色 */
+button::after {
+    content: ""; /* 空のコンテンツを追加 */
+    width: 8px; /* 矢印の幅 */
+    height: 8px; /* 矢印の高さ */
+    border-top: solid 1px #333; /* 矢印の上部のボーダー */
+    border-right: solid 1px #333; /* 矢印の右側のボーダー */
+    transform: rotate(45deg); /* 45度回転して矢印を作成 */
+    position: absolute; /* 絶対位置 */
+    margin-top: -4px; /* 矢印を中央に配置するための調整 */
+    top: 50%; /* 縦方向中央 */
+    left: 110px; /* 横方向の位置 */
 }
