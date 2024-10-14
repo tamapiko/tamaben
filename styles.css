@@ -3,12 +3,6 @@ body {
     font-family:"Zen Kurenaido";
     color:#182246;
 }
-.maintenance {
-    display: flex;
-    grid-template-columns: repeat(2, 1fr);
-    justify-content: center;
-    align-items: center;
-}
 .maintenance img {
     width:50%;
     text-align:center;
@@ -27,6 +21,7 @@ body {
 .kokugo , .suugaku , .eigo , .rika , .shakai {
     display: flex;
     justify-content: center;
+    
 }
 .subject img {
     width:70%;
