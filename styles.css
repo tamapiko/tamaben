@@ -13,3 +13,21 @@ img {
     flex-flow: column;
     text-align: center;
 }
+button {
+    background-color: #4CAF50; /* 緑の背景色 */
+    border: none; /* ボーダーなし */
+    color: white; /* 文字色は白 */
+    padding: 15px 32px; /* 上下15px、左右32pxの余白 */
+    text-align: center; /* テキストを中央に配置 */
+    text-decoration: none; /* テキストの下線なし */
+    display: inline-block; /* インラインブロック */
+    font-size: 16px; /* フォントサイズ */
+    margin: 4px 2px; /* マージンを設定 */
+    cursor: pointer; /* カーソルをポインターに */
+    border-radius: 4px; /* 角を丸める */
+    transition: background-color 0.3s; /* 背景色の遷移効果 */
+}
+
+button:hover {
+    background-color: #45a049; /* ホバー時の背景色 */
+}
