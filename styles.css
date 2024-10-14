@@ -15,7 +15,7 @@ body {
     flex-direction:column;
 }
 .subject-txt {
-    font-size:80%;
+    font-size:80px;
     text-align: center;
 }
 .subject {
