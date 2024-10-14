@@ -13,6 +13,13 @@ img {
     flex-flow: column;
     text-align: center;
 }
+.button-container {
+    display: flex; /* フレックスボックスを使用 */
+    justify-content: space-between; /* ボタン間にスペースを均等に */
+    max-width: 400px; /* コンテナの最大幅を設定 */
+    margin: auto; /* コンテナを中央に配置 */
+}
+
 button {
     border: solid 1px #182246; /* ボーダーを指定された色に設定 */
     border-radius: 50px; /* 角を丸める */
@@ -22,6 +29,6 @@ button {
     color: #182246; /* 文字色を指定された色に設定 */
     font-size: 16px; /* フォントサイズ */
     cursor: pointer; /* カーソルをポインターに */
-    display: inline-block; /* インラインブロックにしてサイズを設定可能に */
-    line-height: 1.5; /* 行の高さを設定して縦中央に */
+    flex: 1; /* ボタンの幅を均等に */
+    margin: 0 5px; /* ボタン間の余白を設定 */
 }
