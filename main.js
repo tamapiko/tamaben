@@ -36,7 +36,7 @@ function displayImages(schoolData, containers) {
 }
 
 // JSONデータを外部から読み込む
-fetch('drill.json')
+fetch('/tamabeb/drill.json')
     .then(response => {
         if (!response.ok) {
             throw new Error('Network response was not ok');
