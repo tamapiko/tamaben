@@ -14,14 +14,13 @@ img {
     text-align: center;
 }
 button {
-    border: solid 1px #182246; /* ボーダーを設定 */
+    border: solid 1px #182246; /* ボーダーを指定された色に設定 */
     border-radius: 50px; /* 角を丸める */
     padding: 16px 10px 16px 20px; /* 上下16px、右10px、左20pxの余白 */
     text-align: center; /* テキストを中央に配置 */
     position: relative; /* 位置を相対的に */
-    background-color: transparent; /* 背景色は透明 */
-    color: #182246; /* 文字色 */
+    background-color: white; /* 背景色を白に設定 */
+    color: #182246; /* 文字色を指定された色に設定 */
     font-size: 16px; /* フォントサイズ */
     cursor: pointer; /* カーソルをポインターに */
-    border: none; /* デフォルトのボーダーを無効に */
 }
