@@ -17,7 +17,6 @@ body {
 }
 .maintenance{
     display:flex;
-    display: grid;
     flex-flow: column;
     text-align: center;
 }
