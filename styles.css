@@ -21,7 +21,7 @@ body {
     text-align: center;
 }
 .subject {
-    display: grid;
+    display: flex;
     grid-template-columns: repeat(2, 1fr);
     justify-content: center;
 }
