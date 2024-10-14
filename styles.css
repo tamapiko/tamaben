@@ -14,7 +14,7 @@ img {
     text-align: center;
 }
 .subject img {
-   Filter: drop-shadow (0px 0px 0px rgba (000, 000, 000, 0.8));
+   filter: drop-shadow (0px 0px 0px rgba (000, 000, 000, 0.8));
 }
 .button-container {
     display: flex; /* フレックスボックスを使用 */
