@@ -21,9 +21,9 @@ body {
     text-align: center;
 }
 .subject {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;;
 }
 .subject img {
     width:40%;
