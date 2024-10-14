@@ -14,10 +14,10 @@ body {
     align-items: center;
 }
 .subject-txt {
-    font-size:40px;
-    text-align: center;
-    display:flex;
+    font-size:60%;
+    display: flex;
     justify-content: center;
+    align-items: center;
 }
 .kokugo , .suugaku , .eigo , .rika , .shakai {
     display: flex;
