@@ -14,6 +14,7 @@ body {
     text-align: center;
 }
 .subject img {
+    width:50%;
     filter: drop-shadow(16px 16px 20px rgba(0, 0, 0, 0.2)); /* ドロップシャドウを追加 */
 }
 }
