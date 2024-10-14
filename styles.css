@@ -24,8 +24,8 @@ body {
     align-items: center;
     flex-direction:column;  
 }
-.kokugo , .suugaku , .eigo , .rika , .shakai {
-        display: flex;
+.kokugo , .suugaku , .eigo , .rika , .shakai a {
+    display: flex;
     justify-content: center;
     align-items: center;
     flex-direction:column;
