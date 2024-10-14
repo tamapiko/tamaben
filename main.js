@@ -1,125 +1,37 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const page = document.body.dataset.page;
+// 画像の拡張子を指定
+const extension = ".png"; // 拡張子を .png に変更
 
-    switch (page) {
-        case 'grade':
-            loadGrades();
-            break;
-        case 'subject':
-            loadSubjects();
-            break;
-        case 'unit':
-            loadUnits();
-            break;
-        case 'download':
-            loadDownload();
-            break;
-    }
-});
+// 各学校のコンテナ要素を取得
+const elementaryContainer = document.getElementById('elementary-container');
+const middleContainer = document.getElementById('middle-container');
+const highContainer = document.getElementById('high-container');
 
-function loadGrades() {
-    fetch('drills.json')
-        .then(response => response.json())
-        .then(data => {
-            const gradeButtonsContainer = document.getElementById('grade-buttons');
-            data.grades.forEach(grade => {
-                const button = document.createElement('button');
-                button.textContent = grade.name;
-                button.addEventListener('click', () => {
-                    localStorage.setItem('selectedGrade', JSON.stringify(grade));
-                    window.location.href = 'subject.html';
-                });
-                gradeButtonsContainer.appendChild(button);
-            });
-             const subjectButtonsContainer = document.getElementById('subject-buttons');
-    selectedGrade.subjects.forEach(subject => {
-        const button = document.createElement('button');
-        button.textContent = subject.name;
-        button.addEventListener('click', () => {
-            localStorage.setItem('selectedSubject', JSON.stringify(subject));
-            window.location.href = 'unit.html';
-        });
-        subjectButtonsContainer.appendChild(button);
-    });
-        })
-        .catch(error => console.error('Error loading drills data:', error));
-}
-
-function loadSubjects() {
-    const selectedGrade = JSON.parse(localStorage.getItem('selectedGrade'));
-    if (!selectedGrade) {
-        window.location.href = 'index.html';
-        return;
-    }
-
-    const subjectMessage = document.getElementById('subject-message');
-    subjectMessage.textContent = `${selectedGrade.name}の教科を選んでください`;
-
-    const subjectButtonsContainer = document.getElementById('subject-buttons');
-    selectedGrade.subjects.forEach(subject => {
-        const button = document.createElement('button');
-        button.textContent = subject.name;
-        button.addEventListener('click', () => {
-            localStorage.setItem('selectedSubject', JSON.stringify(subject));
-            window.location.href = 'unit.html';
-        });
-        subjectButtonsContainer.appendChild(button);
-    });
-
-    const backButton = document.getElementById('back-button');
-    backButton.addEventListener('click', () => {
-        window.location.href = 'index.html';
+// 学校別に画像を表示する関数
+function displayImages(schoolData, container) {
+    schoolData.subjects.forEach(subject => {
+        const imgElement = document.createElement('img');
+        imgElement.src = subject.image + extension; // 拡張子を後付け
+        imgElement.alt = subject.name;
+        container.appendChild(imgElement);
+        container.appendChild(document.createTextNode(subject.name)); // 教科名も表示
+        container.appendChild(document.createElement('br')); // 各教科の後に改行
     });
 }
 
-function loadUnits() {
-    const selectedGrade = JSON.parse(localStorage.getItem('selectedGrade'));
-    const selectedSubject = JSON.parse(localStorage.getItem('selectedSubject'));
-    if (!selectedGrade || !selectedSubject) {
-        window.location.href = 'index.html';
-        return;
-    }
-
-    const unitMessage = document.getElementById('unit-message');
-    unitMessage.textContent = `${selectedGrade.name}の${selectedSubject.name}の単元を選んでください`;
-
-    const unitButtonsContainer = document.getElementById('unit-buttons');
-    selectedSubject.units.forEach(unit => {
-        const button = document.createElement('button');
-        button.textContent = unit.name;
-        button.addEventListener('click', () => {
-            localStorage.setItem('selectedUnit', JSON.stringify(unit));
-            window.location.href = 'download.html';
-        });
-        unitButtonsContainer.appendChild(button);
+// JSONデータを外部から読み込む
+fetch('drill.json')
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(jsonData => {
+        // 小中高の画像を表示
+        displayImages(jsonData.schools.elementary, elementaryContainer);
+        displayImages(jsonData.schools.middle, middleContainer);
+        displayImages(jsonData.schools.high, highContainer);
+    })
+    .catch(error => {
+        console.error('Error loading JSON data:', error);
     });
-
-    const backButton = document.getElementById('back-button');
-    backButton.addEventListener('click', () => {
-        window.location.href = 'subject.html';
-    });
-}
-
-function loadDownload() {
-    const selectedGrade = JSON.parse(localStorage.getItem('selectedGrade'));
-    const selectedSubject = JSON.parse(localStorage.getItem('selectedSubject'));
-    const selectedUnit = JSON.parse(localStorage.getItem('selectedUnit'));
-
-    if (!selectedGrade || !selectedSubject || !selectedUnit) {
-        window.location.href = 'index.html';
-        return;
-    }
-
-    const downloadMessage = document.getElementById('download-message');
-    downloadMessage.textContent = `${selectedGrade.name}の${selectedSubject.name}の${selectedUnit.name}をダウンロードします`;
-
-    const downloadButton = document.getElementById('download-button');
-    downloadButton.addEventListener('click', () => {
-        window.location.href = selectedUnit.file;
-    });
-
-    const backButton = document.getElementById('back-button');
-    backButton.addEventListener('click', () => {
-        window.location.href = 'unit.html';
-    });
-}
