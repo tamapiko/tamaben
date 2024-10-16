@@ -1,0 +1,22 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+#controls {
+    margin-bottom: 20px;
+}
+
+#parameters input {
+    margin-top: 10px;
+    display: block;
+}
+
+#svgContainer {
+    border: 1px solid black;
+    display: inline-block;
+}
+
+svg {
+    background-color: #f0f0f0;
+}
