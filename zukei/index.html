@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数学図形作成メーカー</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>数学図形作成メーカー</h1>
+    <div id="controls">
+        <label for="shape">図形を選んでください:</label>
+        <select id="shape">
+            <!-- 平面図形 -->
+            <option value="point">点</option>
+            <option value="line">直線</option>
+            <option value="lineSegment">線分</option>
+            <option value="ray">半直線</option>
+            <option value="triangle">三角形</option>
+            <option value="isoscelesTriangle">二等辺三角形</option>
+            <option value="rightTriangle">直角三角形</option>
+            <option value="obtuseTriangle">鈍角三角形</option>
+            <option value="parallelogram">平行四辺形</option>
+            <option value="rhombus">菱形</option>
+            <option value="trapezoid">台形</option>
+            <option value="rectangle">長方形</option>
+            <option value="square">正方形</option>
+            <option value="circle">円</option>
+            <option value="ellipse">楕円</option>
+            <option value="sector">扇形</option>
+            <option value="polygon">正多角形</option>
+            <option value="star">星形</option>
+
+            <!-- 立体図形 -->
+            <option value="cube">立方体</option>
+            <option value="rectangularPrism">直方体</option>
+            <option value="cylinder">円柱</option>
+            <option value="cone">円錐</option>
+            <option value="sphere">球</option>
+            <option value="pyramid">角錐</option>
+            <option value="frustum">円錐台</option>
+            <option value="prism">角柱</option>
+        </select>
+
+        <div id="parameters">
+            <!-- 図形に応じたパラメータ入力欄を表示 -->
+        </div>
+
+        <button id="drawButton">描画</button>
+        <button id="saveButton">SVGとして保存</button>
+    </div>
+
+    <div id="svgContainer">
+        <svg id="svgCanvas" width="500" height="500"></svg>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
