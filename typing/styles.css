@@ -6,7 +6,7 @@ body {
 
 h1 {
     font-size: 2em;
-    color: #4CAF50; /* タイトルの色 */
+    color: #4CAF50;
 }
 
 #textToType {
@@ -32,10 +32,9 @@ h1 {
 
 /* 再生中のボタン（ポーズボタン） */
 #readAloudButton.playing {
-    border-left: 10px solid transparent;
-    border-right: 10px solid transparent;
-    height: 50px;
-    width: 30px;
+    border: none;
+    width: 20px;
+    height: 40px;
     background: repeating-linear-gradient(
         to right,
         #4CAF50,
