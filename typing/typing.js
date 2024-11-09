@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const textElement = document.querySelector("#textToType");
     const userInputElement = document.querySelector("#userInput");
     const statusElement = document.querySelector("#status");
+    const readAloudButton = document.querySelector("#readAloudButton"); // 読み上げボタン
 
     // JSONファイルからテキストを取得
     fetch("text.json")
@@ -19,53 +20,45 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // キー入力イベントのリスナーを追加
     document.addEventListener("keydown", (event) => {
-        // 判定に含める文字のみを定義（アルファベット、数字、句読点、アポストロフィ、半角スペース）
         const allowedCharacters = /^[a-zA-Z0-9.,' ]$/;
 
         if (event.key === "Backspace") {
-            // Backspaceキーで最後の文字を削除
             if (userInput.length > 0) {
-                userInput = userInput.slice(0, -1);  // 最後の文字を削除
-                updateDisplay();  // 表示を更新
+                userInput = userInput.slice(0, -1);
+                updateDisplay();
             }
             return;
         }
 
-        // 判定に含まれないキー（Enter、その他許可されていないキー）
         if (!allowedCharacters.test(event.key)) return;
 
-        // 入力した1文字をチェック
         const currentIndex = userInput.length;
         const correctChar = textToType[currentIndex];
 
         if (event.key === correctChar) {
-            // 正しい場合は緑で追加
             userInput += event.key;
             statusElement.textContent = "";
         } else {
-            // 間違った場合は赤で追加しリセット
             userInput += event.key;
             statusElement.textContent = "間違いがあります。";
             statusElement.style.color = "red";
-            userInput = ""; // ミスした場合はリセット
+            userInput = "";
         }
 
         updateDisplay();
 
-        // 全ての文字が一致した場合
         if (userInput === textToType) {
             statusElement.textContent = "成功！";
             statusElement.style.color = "green";
         }
     });
 
-    // 表示を更新する関数
     function updateDisplay() {
-        userInputElement.innerHTML = "";  // 表示をリセット
+        userInputElement.innerHTML = "";
 
         for (let i = 0; i < userInput.length; i++) {
             const span = document.createElement("span");
-            span.textContent = userInput[i] === " " ? "␣" : userInput[i]; // 半角スペースをわかりやすく表示
+            span.textContent = userInput[i] === " " ? "␣" : userInput[i];
             if (userInput[i] === textToType[i]) {
                 span.classList.add("correct");
             } else {
@@ -74,4 +67,15 @@ document.addEventListener("DOMContentLoaded", () => {
             userInputElement.appendChild(span);
         }
     }
+
+    // 読み上げボタンのクリックイベント
+    readAloudButton.addEventListener("click", () => {
+        if ('speechSynthesis' in window) {
+            const utterance = new SpeechSynthesisUtterance(textToType);
+            utterance.lang = "ja-JP"; // 日本語
+            speechSynthesis.speak(utterance);
+        } else {
+            console.error("このブラウザではSpeechSynthesis APIがサポートされていません。");
+        }
+    });
 });
