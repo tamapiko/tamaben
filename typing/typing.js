@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         .catch(error => {
             console.error("JSONファイルの読み込みエラー:", error);
-            textElement.textContent = "テキストを読み込めませんでした";
+            textElement.textContent = "Text failed to load";
         });
 
     // キー入力イベントのリスナーを追加
@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
             statusElement.textContent = "";
         } else {
             userInput += event.key;
-            statusElement.textContent = "間違いがあります。";
+            statusElement.textContent = "There is a mistake.";
             statusElement.style.color = "red";
             mistypes++;  // ミスタイプの数をカウント
         }
@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
         updateDisplay();
 
         if (userInput === textToType) {
-            statusElement.textContent = "成功！";
+            statusElement.textContent = "Success!";
             statusElement.style.color = "green";
             const endTime = Date.now();
             const timeTaken = (endTime - startTime) / 1000;  // 時間を秒単位で取得
@@ -86,10 +86,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // タイピング結果をPDFに追加
         doc.setFontSize(16);
-        doc.text("タマピング 結果", 20, 20);
-        doc.text(`入力時間: ${timeTaken.toFixed(2)}秒`, 20, 30);
-        doc.text(`タイプ数: ${userInput.length}`, 20, 40);
-        doc.text(`ミスタイプ数: ${mistypes}`, 20, 50);
+        doc.text("Typing Test Results", 20, 20);
+        doc.text(`Time Taken: ${timeTaken.toFixed(2)} seconds`, 20, 30);
+        doc.text(`Total Keystrokes: ${userInput.length}`, 20, 40);
+        doc.text(`Mistakes: ${mistypes}`, 20, 50);
 
         // PDFをダウンロード
         doc.save("typing_result.pdf");
@@ -115,7 +115,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 readAloudButton.classList.remove("playing");
             };
         } else {
-            console.error("このブラウザではSpeechSynthesis APIがサポートされていません。");
+            console.error("This browser does not support SpeechSynthesis API.");
         }
     });
 });
