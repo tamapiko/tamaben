@@ -19,12 +19,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // キー入力イベントのリスナーを追加
     document.addEventListener("keydown", (event) => {
-        const allowedCharacters = /^[a-zA-Z0-9.,']$/; // 許可する文字列の正規表現
+        // 判定に含める文字のみを定義
+        const allowedCharacters = /^[a-zA-Z0-9.,']$/;
 
-        // 判定に含めないキー（許可文字以外のキー、Shift、Backspace、Enter）
-        if (!allowedCharacters.test(event.key) || event.key === "Shift" || event.key === "Backspace" || event.key === "Enter") {
-            return;
-        }
+        // 判定に含まれないキー（Shift、Backspace、Enter、その他許可されていないキー）
+        if (!allowedCharacters.test(event.key)) return;
 
         // 入力した1文字をチェック
         const currentIndex = userInput.length;
