@@ -72,7 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
     readAloudButton.addEventListener("click", () => {
         if ('speechSynthesis' in window) {
             const utterance = new SpeechSynthesisUtterance(textToType);
-            utterance.lang = "ja-JP";
+            utterance.lang = "en-US"; // 英語
             utterance.rate = 1.0;
 
             if (readAloudButton.classList.contains("playing")) {
