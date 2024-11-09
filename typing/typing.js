@@ -1,10 +1,13 @@
 document.addEventListener("DOMContentLoaded", () => {
     let textToType = "";  // JSONから取得するテキスト
     let userInput = "";
+    let startTime = Date.now();
+    let mistypes = 0;
     const textElement = document.querySelector("#textToType");
     const userInputElement = document.querySelector("#userInput");
     const statusElement = document.querySelector("#status");
     const readAloudButton = document.querySelector("#readAloudButton");
+    const downloadButton = document.querySelector("#downloadButton");
 
     // JSONファイルからテキストを取得
     fetch("text.json")
@@ -42,6 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
             userInput += event.key;
             statusElement.textContent = "間違いがあります。";
             statusElement.style.color = "red";
+            mistypes++;  // ミスタイプの数をカウント
         }
 
         updateDisplay();
@@ -49,6 +53,14 @@ document.addEventListener("DOMContentLoaded", () => {
         if (userInput === textToType) {
             statusElement.textContent = "成功！";
             statusElement.style.color = "green";
+            const endTime = Date.now();
+            const timeTaken = (endTime - startTime) / 1000;  // 時間を秒単位で取得
+
+            // PDFダウンロードボタンを表示
+            downloadButton.style.display = "block";
+            downloadButton.addEventListener("click", () => {
+                generatePDF(timeTaken);
+            });
         }
     });
 
@@ -65,6 +77,22 @@ document.addEventListener("DOMContentLoaded", () => {
             }
             userInputElement.appendChild(span);
         }
+    }
+
+    // PDFを生成してダウンロード
+    function generatePDF(timeTaken) {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        // タイピング結果をPDFに追加
+        doc.setFontSize(16);
+        doc.text("タマピング 結果", 20, 20);
+        doc.text(`入力時間: ${timeTaken.toFixed(2)}秒`, 20, 30);
+        doc.text(`タイプ数: ${userInput.length}`, 20, 40);
+        doc.text(`ミスタイプ数: ${mistypes}`, 20, 50);
+
+        // PDFをダウンロード
+        doc.save("typing_result.pdf");
     }
 
     // 読み上げボタンのクリックイベント
