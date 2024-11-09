@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const textElement = document.querySelector("#textToType");
     const userInputElement = document.querySelector("#userInput");
     const statusElement = document.querySelector("#status");
-    const readAloudButton = document.querySelector("#readAloudButton"); // 読み上げボタン
+    const readAloudButton = document.querySelector("#readAloudButton"); // 再生ボタン
 
     // JSONファイルからテキストを取得
     fetch("text.json")
@@ -72,10 +72,21 @@ document.addEventListener("DOMContentLoaded", () => {
     readAloudButton.addEventListener("click", () => {
         if ('speechSynthesis' in window) {
             const utterance = new SpeechSynthesisUtterance(textToType);
-            utterance.lang = "ja-JP"; // 日本語
-            utterance.rate = 1.0; // 読み上げ速度
-            speechSynthesis.cancel(); // 以前の読み上げを停止
-            speechSynthesis.speak(utterance);
+            utterance.lang = "ja-JP";
+            utterance.rate = 1.0;
+
+            if (readAloudButton.classList.contains("playing")) {
+                speechSynthesis.cancel();
+                readAloudButton.classList.remove("playing");
+            } else {
+                speechSynthesis.cancel();
+                speechSynthesis.speak(utterance);
+                readAloudButton.classList.add("playing");
+            }
+
+            utterance.onend = () => {
+                readAloudButton.classList.remove("playing");
+            };
         } else {
             console.error("このブラウザではSpeechSynthesis APIがサポートされていません。");
         }
