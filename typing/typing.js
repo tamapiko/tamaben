@@ -19,8 +19,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // キー入力イベントのリスナーを追加
     document.addEventListener("keydown", (event) => {
-        // 判定に含める文字のみを定義
-        const allowedCharacters = /^[a-zA-Z0-9.,']$/;
+        // 判定に含める文字のみを定義（アルファベット、数字、句読点、アポストロフィ、半角スペース）
+        const allowedCharacters = /^[a-zA-Z0-9.,' ]$/;
 
         if (event.key === "Backspace") {
             // Backspaceキーで最後の文字を削除
@@ -65,15 +65,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
         for (let i = 0; i < userInput.length; i++) {
             const span = document.createElement("span");
-            span.textContent = userInput[i];
-
-            // 入力が正しい文字なら緑、間違っていたら赤で表示
+            span.textContent = userInput[i] === " " ? "␣" : userInput[i]; // 半角スペースをわかりやすく表示
             if (userInput[i] === textToType[i]) {
                 span.classList.add("correct");
             } else {
                 span.classList.add("incorrect");
             }
-
             userInputElement.appendChild(span);
         }
     }
