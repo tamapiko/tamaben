@@ -73,6 +73,8 @@ document.addEventListener("DOMContentLoaded", () => {
         if ('speechSynthesis' in window) {
             const utterance = new SpeechSynthesisUtterance(textToType);
             utterance.lang = "ja-JP"; // 日本語
+            utterance.rate = 1.0; // 読み上げ速度
+            speechSynthesis.cancel(); // 以前の読み上げを停止
             speechSynthesis.speak(utterance);
         } else {
             console.error("このブラウザではSpeechSynthesis APIがサポートされていません。");
