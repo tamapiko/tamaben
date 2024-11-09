@@ -2,25 +2,19 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>タマピング</title>
-    <style>
-        #textToType {
-            font-size: 1.5em;
-        }
-        .correct {
-            color: green;
-        }
-        .incorrect {
-            color: red;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>タイピング練習</h1>
-    <p id="textToType" class="typing">Loading...</p>
-    <p id="userInput"></p>
-    <p id="status"></p>
+    <h1>タマピング</h1> <!-- タイトル -->
+    <div>
+        <p id="textToType">テキストを読み込んでいます...</p>
+        <button id="readAloudButton">
+            <span class="speaker-icon"></span> <!-- CSSアイコン -->
+        </button>
+        <div id="userInput"></div>
+        <p id="status"></p>
+    </div>
     <script src="typing.js"></script>
 </body>
 </html>
