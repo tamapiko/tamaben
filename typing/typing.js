@@ -19,8 +19,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // キー入力イベントのリスナーを追加
     document.addEventListener("keydown", (event) => {
-        // 判定に含めないキー
-        if (event.key === "Backspace" || event.key === "Enter" || event.key.length > 1) return;
+        // 判定に含めないキー（Shift、Backspace、Enter、および特殊キー）
+        if (event.key === "Backspace" || event.key === "Enter" || event.key === "Shift" || event.key.length > 1) return;
 
         // 入力した1文字をチェック
         const currentIndex = userInput.length;
