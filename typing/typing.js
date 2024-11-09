@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const textElement = document.querySelector("#textToType");
     const userInputElement = document.querySelector("#userInput");
     const statusElement = document.querySelector("#status");
-    const readAloudButton = document.querySelector("#readAloudButton"); // 再生ボタン
+    const readAloudButton = document.querySelector("#readAloudButton");
 
     // JSONファイルからテキストを取得
     fetch("text.json")
@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // キー入力イベントのリスナーを追加
     document.addEventListener("keydown", (event) => {
-        const allowedCharacters = /^[a-zA-Z0-9.,' ]$/;
+        const allowedCharacters = /^[a-zA-Z0-9.,' \-]$/; // マイナス（-）と半角スペースを含めた正規表現
 
         if (event.key === "Backspace") {
             if (userInput.length > 0) {
@@ -42,7 +42,6 @@ document.addEventListener("DOMContentLoaded", () => {
             userInput += event.key;
             statusElement.textContent = "間違いがあります。";
             statusElement.style.color = "red";
-            userInput = "";
         }
 
         updateDisplay();
@@ -58,7 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         for (let i = 0; i < userInput.length; i++) {
             const span = document.createElement("span");
-            span.textContent = userInput[i] === " " ? "␣" : userInput[i];
+            span.textContent = userInput[i] === " " ? "␣" : userInput[i]; // スペースを「␣」で表示
             if (userInput[i] === textToType[i]) {
                 span.classList.add("correct");
             } else {
