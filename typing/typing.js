@@ -22,7 +22,16 @@ document.addEventListener("DOMContentLoaded", () => {
         // 判定に含める文字のみを定義
         const allowedCharacters = /^[a-zA-Z0-9.,']$/;
 
-        // 判定に含まれないキー（Shift、Backspace、Enter、その他許可されていないキー）
+        if (event.key === "Backspace") {
+            // Backspaceキーで最後の文字を削除
+            if (userInput.length > 0) {
+                userInput = userInput.slice(0, -1);  // 最後の文字を削除
+                updateDisplay();  // 表示を更新
+            }
+            return;
+        }
+
+        // 判定に含まれないキー（Enter、その他許可されていないキー）
         if (!allowedCharacters.test(event.key)) return;
 
         // 入力した1文字をチェック
@@ -32,15 +41,16 @@ document.addEventListener("DOMContentLoaded", () => {
         if (event.key === correctChar) {
             // 正しい場合は緑で追加
             userInput += event.key;
-            userInputElement.innerHTML += `<span class="correct">${event.key}</span>`;
             statusElement.textContent = "";
         } else {
             // 間違った場合は赤で追加しリセット
-            userInputElement.innerHTML += `<span class="incorrect">${event.key}</span>`;
+            userInput += event.key;
             statusElement.textContent = "間違いがあります。";
             statusElement.style.color = "red";
             userInput = ""; // ミスした場合はリセット
         }
+
+        updateDisplay();
 
         // 全ての文字が一致した場合
         if (userInput === textToType) {
@@ -48,4 +58,23 @@ document.addEventListener("DOMContentLoaded", () => {
             statusElement.style.color = "green";
         }
     });
+
+    // 表示を更新する関数
+    function updateDisplay() {
+        userInputElement.innerHTML = "";  // 表示をリセット
+
+        for (let i = 0; i < userInput.length; i++) {
+            const span = document.createElement("span");
+            span.textContent = userInput[i];
+
+            // 入力が正しい文字なら緑、間違っていたら赤で表示
+            if (userInput[i] === textToType[i]) {
+                span.classList.add("correct");
+            } else {
+                span.classList.add("incorrect");
+            }
+
+            userInputElement.appendChild(span);
+        }
+    }
 });
