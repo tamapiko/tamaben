@@ -20,45 +20,29 @@ document.addEventListener("DOMContentLoaded", () => {
     // キー入力イベントのリスナーを追加
     document.addEventListener("keydown", (event) => {
         // 判定に含めないキー
-        if (event.key === "Backspace" || event.key === "Enter") return;
+        if (event.key === "Backspace" || event.key === "Enter" || event.key.length > 1) return;
 
-        // 入力文字を追加
-        userInput += event.key;
+        // 入力した1文字をチェック
+        const currentIndex = userInput.length;
+        const correctChar = textToType[currentIndex];
 
-        // 入力が正しいかどうかを判定し、表示を更新
-        updateDisplay();
-    });
-
-    function updateDisplay() {
-        let displayText = "";  // 表示するHTMLテキスト
-
-        for (let i = 0; i < textToType.length; i++) {
-            if (i < userInput.length) {
-                if (userInput[i] === textToType[i]) {
-                    // 正しい文字は緑に
-                    displayText += `<span class="correct">${userInput[i]}</span>`;
-                } else {
-                    // 間違った文字は赤に
-                    displayText += `<span class="incorrect">${userInput[i]}</span>`;
-                }
-            } else {
-                // 残りの文字をグレーで表示
-                displayText += `<span>${textToType[i]}</span>`;
-            }
+        if (event.key === correctChar) {
+            // 正しい場合は緑で追加
+            userInput += event.key;
+            userInputElement.innerHTML += `<span class="correct">${event.key}</span>`;
+            statusElement.textContent = "";
+        } else {
+            // 間違った場合は赤で追加しリセット
+            userInputElement.innerHTML += `<span class="incorrect">${event.key}</span>`;
+            statusElement.textContent = "間違いがあります。";
+            statusElement.style.color = "red";
+            userInput = ""; // ミスした場合はリセット
         }
 
-        userInputElement.innerHTML = displayText;
-
-        // 入力が正しいかどうかを表示
+        // 全ての文字が一致した場合
         if (userInput === textToType) {
             statusElement.textContent = "成功！";
             statusElement.style.color = "green";
-        } else if (!textToType.startsWith(userInput)) {
-            statusElement.textContent = "間違いがあります。";
-            statusElement.style.color = "red";
-            userInput = "";  // 間違えた場合はリセット
-        } else {
-            statusElement.textContent = "";
         }
-    }
+    });
 });
