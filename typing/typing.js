@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-    let textToType = "";  // JSONから取得するテキスト
+    let textToType = "";
     let userInput = "";
     let startTime = Date.now();
     let mistypes = 0;
@@ -8,6 +8,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const statusElement = document.querySelector("#status");
     const readAloudButton = document.querySelector("#readAloudButton");
     const downloadButton = document.querySelector("#downloadButton");
+    const speedControl = document.querySelector("#speedControl");
+    const speedValue = document.querySelector("#speedValue");
 
     // JSONファイルからテキストを取得
     fetch("text.json")
@@ -18,12 +20,11 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         .catch(error => {
             console.error("JSONファイルの読み込みエラー:", error);
-            textElement.textContent = "Text failed to load";
+            textElement.textContent = "テキストを読み込めませんでした";
         });
 
-    // キー入力イベントのリスナーを追加
     document.addEventListener("keydown", (event) => {
-        const allowedCharacters = /^[a-zA-Z0-9.,' \-]$/; // マイナス（-）と半角スペースを含めた正規表現
+        const allowedCharacters = /^[a-zA-Z0-9.,' \-]$/; 
 
         if (event.key === "Backspace") {
             if (userInput.length > 0) {
@@ -43,7 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
             statusElement.textContent = "";
         } else {
             userInput += event.key;
-            statusElement.textContent = "There is a mistake.";
+            statusElement.textContent = "間違いがあります。";
             statusElement.style.color = "red";
             mistypes++;  // ミスタイプの数をカウント
         }
@@ -51,12 +52,11 @@ document.addEventListener("DOMContentLoaded", () => {
         updateDisplay();
 
         if (userInput === textToType) {
-            statusElement.textContent = "Success!";
+            statusElement.textContent = "成功！";
             statusElement.style.color = "green";
             const endTime = Date.now();
-            const timeTaken = (endTime - startTime) / 1000;  // 時間を秒単位で取得
+            const timeTaken = (endTime - startTime) / 1000;  
 
-            // PDFダウンロードボタンを表示
             downloadButton.style.display = "block";
             downloadButton.addEventListener("click", () => {
                 generatePDF(timeTaken);
@@ -69,7 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         for (let i = 0; i < userInput.length; i++) {
             const span = document.createElement("span");
-            span.textContent = userInput[i] === " " ? "␣" : userInput[i]; // スペースを「␣」で表示
+            span.textContent = userInput[i] === " " ? "␣" : userInput[i]; 
             if (userInput[i] === textToType[i]) {
                 span.classList.add("correct");
             } else {
@@ -79,28 +79,29 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // PDFを生成してダウンロード
     function generatePDF(timeTaken) {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
 
-        // タイピング結果をPDFに追加
-        doc.setFontSize(16);
-        doc.text("Typing Test Results", 20, 20);
-        doc.text(`Time Taken: ${timeTaken.toFixed(2)} seconds`, 20, 30);
-        doc.text(`Total Keystrokes: ${userInput.length}`, 20, 40);
-        doc.text(`Mistakes: ${mistypes}`, 20, 50);
+        // カスタムフォントの設定
+        doc.addFileToVFS("NotoSansJP-Regular.ttf", notoSansJp);
+        doc.addFont("NotoSansJP-Regular.ttf", "NotoSansJP", "normal");
+        doc.setFont("NotoSansJP");
 
-        // PDFをダウンロード
+        doc.setFontSize(16);
+        doc.text("タマピング 結果", 20, 20);
+        doc.text(`入力時間: ${timeTaken.toFixed(2)}秒`, 20, 30);
+        doc.text(`タイプ数: ${userInput.length}`, 20, 40);
+        doc.text(`ミスタイプ数: ${mistypes}`, 20, 50);
+
         doc.save("typing_result.pdf");
     }
 
-    // 読み上げボタンのクリックイベント
     readAloudButton.addEventListener("click", () => {
         if ('speechSynthesis' in window) {
             const utterance = new SpeechSynthesisUtterance(textToType);
-            utterance.lang = "en-US"; // 英語
-            utterance.rate = 1.0;
+            utterance.lang = "en-US"; 
+            utterance.rate = parseFloat(speedControl.value); // スライダーの値で読み上げ速度を調整
 
             if (readAloudButton.classList.contains("playing")) {
                 speechSynthesis.cancel();
@@ -115,7 +116,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 readAloudButton.classList.remove("playing");
             };
         } else {
-            console.error("This browser does not support SpeechSynthesis API.");
+            console.error("このブラウザではSpeechSynthesis APIがサポートされていません。");
         }
+    });
+
+    // スライダーの値を表示と同期
+    speedControl.addEventListener("input", () => {
+        speedValue.textContent = `${speedControl.value}x`;
     });
 });
