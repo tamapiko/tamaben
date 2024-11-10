@@ -4,17 +4,20 @@
     <meta charset="UTF-8">
     <title>タマピング</title>
     <link rel="stylesheet" href="styles.css">
-    <!-- jsPDFライブラリの追加 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/schmich/instascan-fonts@master/NotoSansJP-Regular.js"></script>
 </head>
 <body>
-    <h1>タマピング</h1> <!-- タイトル -->
+    <h1>タマピング</h1>
     <div>
         <p id="textToType">テキストを読み込んでいます...</p>
-        <button id="readAloudButton"></button> <!-- 正三角形の再生ボタン -->
+        <button id="readAloudButton"></button>
+        <label for="speedControl">Reading speed:</label>
+        <input type="range" id="speedControl" min="0.5" max="2" value="1" step="0.1">
+        <span id="speedValue">1.0x</span>
         <div id="userInput"></div>
         <p id="status"></p>
-        <button id="downloadButton" style="display: none;">結果をPDFでダウンロード</button> <!-- PDFダウンロードボタン -->
+        <button id="downloadButton" style="display: none;">Download Results as PDF</button>
     </div>
     <script src="typing.js"></script>
 </body>
