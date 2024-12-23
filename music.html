@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ピアノと猫ボイス - 音楽保存</title>
     <script src="https://cdn.jsdelivr.net/npm/midi.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ffmpeg.js/ffmpeg.min.js"></script>
 </head>
 <body>
     <h1>ピアノと猫ボイス</h1>
@@ -26,6 +27,9 @@
     <script>
         // 猫の鳴き声ファイル
         let catSoundUrl = '';
+        let audioContext;
+        let mediaRecorder;
+        let audioChunks = [];
 
         // 猫の鳴き声ファイルをアップロード
         document.getElementById('cat-sound').addEventListener('change', function(event) {
@@ -117,7 +121,7 @@
             }
 
             const audio = new Audio(catSoundUrl);
-            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
             const source = audioContext.createMediaElementSource(audio);
             const gainNode = audioContext.createGain();
             const pitchShiftNode = audioContext.createGain(); // ピッチシフターとして設定
@@ -133,23 +137,19 @@
         }
 
         // 録音機能の設定
-        let audioRecorder = null;
-        let audioChunks = [];
-
-        // 録音を開始する関数
         function startRecording() {
             if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
                 navigator.mediaDevices.getUserMedia({ audio: true })
                     .then(stream => {
-                        audioRecorder = new MediaRecorder(stream);
-                        audioRecorder.ondataavailable = (event) => {
+                        mediaRecorder = new MediaRecorder(stream);
+                        mediaRecorder.ondataavailable = (event) => {
                             audioChunks.push(event.data);
                         };
-                        audioRecorder.onstop = () => {
+                        mediaRecorder.onstop = () => {
                             const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
-                            saveRecording(audioBlob);
+                            convertToMp3(audioBlob);
                         };
-                        audioRecorder.start();
+                        mediaRecorder.start();
                     })
                     .catch(error => {
                         console.log('録音エラー: ', error);
@@ -157,14 +157,20 @@
             }
         }
 
-        // 録音を停止して音声ファイルとして保存
-        function saveRecording(audioBlob) {
-            const audioUrl = URL.createObjectURL(audioBlob);
-            const a = document.createElement('a');
-            a.href = audioUrl;
-            a.download = 'recorded_music.wav'; // 保存するファイル名
-            a.click();
-            console.log('音声ファイルが保存されました');
+        // 録音を停止して音声ファイルをMP3に変換
+        function convertToMp3(audioBlob) {
+            const fileReader = new FileReader();
+            fileReader.onload = function() {
+                const buffer = fileReader.result;
+                const mp3File = new Blob([buffer], { type: 'audio/mp3' });
+                
+                // 変換されたMP3ファイルをダウンロード
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(mp3File);
+                a.download = 'converted_audio.mp3';
+                a.click();
+            };
+            fileReader.readAsArrayBuffer(audioBlob);
         }
 
         // 録音を開始し、音楽を保存する
