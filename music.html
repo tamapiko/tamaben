@@ -17,6 +17,7 @@
     <input type="file" id="cat-sound-file" accept="audio/*">
     <br>
     <button onclick="playUploadedMidi()">MIDIを再生</button>
+    <button onclick="saveCatSound()">猫の音声を保存</button>
 
     <div id="score"></div>
 
@@ -52,7 +53,8 @@
 
         // MIDIデータを再生する関数
         function playMidi(midiData) {
-            MIDI.Player.loadDataUri(midiData, function() {
+            // MIDIデータの再生
+            MIDI.Player.loadDataUri(URL.createObjectURL(new Blob([midiData])), function() {
                 MIDI.Player.start();
                 playCatSound(); // 猫の鳴き声再生
             });
@@ -77,6 +79,23 @@
             } else {
                 alert("猫の音声ファイルが選択されていません。");
             }
+        }
+
+        // 猫の音声を保存する関数
+        function saveCatSound() {
+            if (!catAudio) {
+                alert("猫の音声ファイルが選択されていません。");
+                return;
+            }
+
+            // Blobを使って音声ファイルを保存
+            catAudio.pause();
+            catAudio.currentTime = 0;
+
+            const link = document.createElement('a');
+            link.href = catAudio.src;
+            link.download = "saved_cat_sound.mp3"; // 保存するファイル名
+            link.click();
         }
     </script>
 </body>
