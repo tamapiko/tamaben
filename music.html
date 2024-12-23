@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ピアノと猫ボイス - アップロード式</title>
+    <title>ピアノと猫ボイス - 音楽保存</title>
     <script src="https://cdn.jsdelivr.net/npm/midi.js"></script>
 </head>
 <body>
@@ -17,6 +17,9 @@
     <input type="file" id="midi-file" accept=".mid,.midi">
     <br>
     <button onclick="playUploadedMidi()">MIDIを再生</button>
+
+    <br>
+    <button onclick="saveAudio()">音楽を保存</button>
 
     <div id="score"></div>
 
@@ -127,6 +130,47 @@
             gainNode.connect(audioContext.destination);
 
             audio.play();
+        }
+
+        // 録音機能の設定
+        let audioRecorder = null;
+        let audioChunks = [];
+
+        // 録音を開始する関数
+        function startRecording() {
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                navigator.mediaDevices.getUserMedia({ audio: true })
+                    .then(stream => {
+                        audioRecorder = new MediaRecorder(stream);
+                        audioRecorder.ondataavailable = (event) => {
+                            audioChunks.push(event.data);
+                        };
+                        audioRecorder.onstop = () => {
+                            const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                            saveRecording(audioBlob);
+                        };
+                        audioRecorder.start();
+                    })
+                    .catch(error => {
+                        console.log('録音エラー: ', error);
+                    });
+            }
+        }
+
+        // 録音を停止して音声ファイルとして保存
+        function saveRecording(audioBlob) {
+            const audioUrl = URL.createObjectURL(audioBlob);
+            const a = document.createElement('a');
+            a.href = audioUrl;
+            a.download = 'recorded_music.wav'; // 保存するファイル名
+            a.click();
+            console.log('音声ファイルが保存されました');
+        }
+
+        // 録音を開始し、音楽を保存する
+        function saveAudio() {
+            startRecording();
+            playUploadedMidi(); // MIDIを再生しながら録音
         }
     </script>
 </body>
