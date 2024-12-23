@@ -3,14 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ピアノと猫ボイス</title>
+    <title>ピアノと猫ボイス - MIDIと猫の音声アップロード</title>
     <script src="https://cdn.jsdelivr.net/npm/vexflow/releases/3.0.9/vexflow-min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/midi.js"></script>
 </head>
 <body>
+    <h1>ピアノと猫ボイス</h1>
+
+    <label for="midi-file">MIDIファイルを選択:</label>
+    <input type="file" id="midi-file" accept=".mid,.midi">
+    <br>
+    <label for="cat-sound-file">猫の音声ファイルを選択 (例: Meow.mp3):</label>
+    <input type="file" id="cat-sound-file" accept="audio/*">
+    <br>
+    <button onclick="playUploadedMidi()">MIDIを再生</button>
+
     <div id="score"></div>
-    <button onclick="playScore()">楽譜を再生</button>
-    <audio id="cat-sound" src="Meow.mp3" preload="auto"></audio>
 
     <script>
         // MIDIの初期化
@@ -22,57 +30,53 @@
             }
         });
 
-        // VexFlowを使って楽譜を描画
-        const VF = Vex.Flow;
-        const div = document.getElementById("score");
-        const renderer = new VF.Renderer(div, VF.Renderer.Backends.SVG);
-        
-        renderer.resize(500, 200);
-        const context = renderer.getContext();
-        const stave = new VF.Stave(10, 40, 400);
-        stave.addClef("treble").addTimeSignature("4/4");
-        stave.setContext(context).draw();
+        let catAudio = null; // 猫の音声を格納する変数
 
-        // 楽譜のノートを設定
-        const notes = [
-            new VF.StaveNote({ keys: ["c/4"], duration: "q" }),  // C
-            new VF.StaveNote({ keys: ["d/4"], duration: "q" }),  // D
-            new VF.StaveNote({ keys: ["e/4"], duration: "q" }),  // E
-            new VF.StaveNote({ keys: ["f/4"], duration: "q" })   // F
-        ];
+        // MIDIファイルをアップロードして再生する関数
+        function playUploadedMidi() {
+            const fileInput = document.getElementById('midi-file');
+            const file = fileInput.files[0];
 
-        // ボイスを作成してノートを追加
-        const voice = new VF.Voice({ num_beats: 4, beat_value: 4 });
-        voice.addTickables(notes);
+            if (!file) {
+                alert("MIDIファイルを選択してください。");
+                return;
+            }
 
-        const formatter = new VF.Formatter().joinVoices([voice]).format([voice], 300);
-        voice.draw(context, stave);
-
-        // 楽譜を再生する関数
-        function playScore() {
-            // C、D、E、FをMIDIで再生
-            MIDI.noteOn(0, 60, 127, 0);  // C
-            MIDI.noteOff(0, 60, 0.75);    // Cの音を0.75秒後に止める
-            playCatSound(); // 猫の鳴き声再生
-
-            MIDI.noteOn(0, 62, 127, 1);  // D
-            MIDI.noteOff(0, 62, 1.75);   // Dの音を1.75秒後に止める
-            playCatSound(); // 猫の鳴き声再生
-
-            MIDI.noteOn(0, 64, 127, 2);  // E
-            MIDI.noteOff(0, 64, 2.75);   // Eの音を2.75秒後に止める
-            playCatSound(); // 猫の鳴き声再生
-
-            MIDI.noteOn(0, 65, 127, 3);  // F
-            MIDI.noteOff(0, 65, 3.75);   // Fの音を3.75秒後に止める
-            playCatSound(); // 猫の鳴き声再生
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const midiData = event.target.result;
+                playMidi(midiData);
+            };
+            reader.readAsArrayBuffer(file);
         }
+
+        // MIDIデータを再生する関数
+        function playMidi(midiData) {
+            MIDI.Player.loadDataUri(midiData, function() {
+                MIDI.Player.start();
+                playCatSound(); // 猫の鳴き声再生
+            });
+        }
+
+        // 猫の音声ファイルを読み込む
+        document.getElementById('cat-sound-file').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+
+            if (file) {
+                const url = URL.createObjectURL(file);
+                catAudio = new Audio(url);
+                alert("猫の音声ファイルが読み込まれました！");
+            }
+        });
 
         // 猫の鳴き声を再生する関数
         function playCatSound() {
-            const audio = document.getElementById('cat-sound');
-            audio.currentTime = 0;  // 音声を最初から再生
-            audio.play();
+            if (catAudio) {
+                catAudio.currentTime = 0;  // 音声を最初から再生
+                catAudio.play();
+            } else {
+                alert("猫の音声ファイルが選択されていません。");
+            }
         }
     </script>
 </body>
