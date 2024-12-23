@@ -15,7 +15,6 @@
     <label for="midi-file">MIDIファイルを選択:</label>
     <input type="file" id="midi-file" accept=".mid,.midi">
     <br>
-    <button onclick="playMusic()">音楽を再生</button>
     <button onclick="saveMusic()">音楽を保存</button>
 
     <div id="score"></div>
@@ -48,49 +47,37 @@
                         catSoundBuffer = buffer;
                         console.log("猫の鳴き声ファイルがロードされました");
                     }).catch(err => {
-                        console.error("音声ファイルのデコードエラー:", err);
+                        console.log("音声ファイルのデコードエラー:", err);
                     });
                 }).catch(err => {
-                    console.error("音声ファイルの読み込みエラー:", err);
+                    console.log("音声ファイルの読み込みエラー:", err);
                 });
         }
 
-        // MIDIファイルをアップロードして再生する関数
-        function playMusic() {
-            const fileInput = document.getElementById('midi-file');
-            const file = fileInput.files[0];
-
-            if (!file) {
-                alert("MIDIファイルを選択してください。");
-                return;
-            }
-
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                const midiData = event.target.result;
-                playMidi(midiData);
-            };
-            reader.readAsArrayBuffer(file);
-        }
-
-        // MIDIデータを再生する関数
-        function playMidi(midiData) {
+        // MIDIファイルをアップロードして音楽を作成
+        function createMusicFromMidi(midiData) {
             const midi = new Midi(midiData);
             let startTime = audioContext.currentTime;
+            let buffers = [];
 
             midi.tracks.forEach((track, trackIndex) => {
                 track.notes.forEach((note) => {
-                    playNoteWithCatSound(note, startTime);
+                    buffers.push(createNoteBuffer(note, startTime));
                     startTime += note.duration; // 次のノートが再生されるタイミング
                 });
             });
+
+            // 音楽のバッファを統合する（簡易的な方法）
+            combineBuffers(buffers);
         }
 
-        // ノートの再生と猫の音声をピッチ変更して再生
-        function playNoteWithCatSound(note, startTime) {
-            // MIDIノート番号に基づきピッチを計算（C4を基準に）
-            const pitchShift = getPitchShiftForNote(note.midi);
-            playCatSound(note.time + startTime, pitchShift);
+        // ノートの再生バッファを作成
+        function createNoteBuffer(note, startTime) {
+            return new Promise((resolve, reject) => {
+                // MIDIノート番号に基づきピッチを計算（C4を基準に）
+                const pitchShift = getPitchShiftForNote(note.midi);
+                playCatSound(startTime, pitchShift, resolve, reject);
+            });
         }
 
         // ノート番号に基づいてピッチを取得（簡易的な変更例）
@@ -115,9 +102,10 @@
         }
 
         // ピッチを変更して猫の音声を再生
-        function playCatSound(startTime, pitchShift) {
+        function playCatSound(startTime, pitchShift, resolve, reject) {
             if (!catSoundBuffer) {
                 console.log("猫の鳴き声がロードされていません");
+                reject("猫の鳴き声がロードされていません");
                 return;
             }
 
@@ -130,18 +118,40 @@
             source.connect(audioContext.destination);
             source.start(audioContext.currentTime + startTime);
 
-            // 音声バッファを保存
-            if (!combinedAudioBuffer) {
-                combinedAudioBuffer = audioContext.createBuffer(2, audioContext.sampleRate * 30, audioContext.sampleRate); // 30秒程度の空のバッファ
+            // 音声バッファへの書き込み（簡易的な方法、実際には音声を編集して結合する方法を考慮）
+            source.onended = () => {
+                resolve();
+            };
+        }
+
+        // 複数の音声バッファを統合する
+        function combineBuffers(buffers) {
+            if (buffers.length === 0) {
+                console.log("バッファがありません");
+                return;
             }
 
-            // 音声バッファへの書き込み（簡易的な方法、実際には音声を編集して結合する方法を考慮）
+            // ここでは簡易的にすべての音声を順番に繋げるだけ
+            let totalDuration = buffers.reduce((acc, buffer) => acc + buffer.duration, 0);
+            let mergedBuffer = audioContext.createBuffer(2, audioContext.sampleRate * totalDuration, audioContext.sampleRate);
+
+            let currentTime = 0;
+            buffers.forEach(buffer => {
+                // バッファのデータをmergedBufferにコピーする
+                for (let channel = 0; channel < 2; channel++) {
+                    mergedBuffer.getChannelData(channel).set(buffer.getChannelData(channel), currentTime * audioContext.sampleRate);
+                }
+                currentTime += buffer.duration;
+            });
+
+            combinedAudioBuffer = mergedBuffer;
+            console.log("音楽が作成されました");
         }
 
         // 音楽を保存する
         function saveMusic() {
             if (!combinedAudioBuffer) {
-                alert("音楽がまだ再生されていません。");
+                console.log("音楽がまだ作成されていません");
                 return;
             }
 
@@ -153,6 +163,19 @@
             a.click();
             console.log("音楽ファイルが保存されました");
         }
+
+        // MIDIファイルを選択して処理
+        document.getElementById('midi-file').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const midiData = e.target.result;
+                    createMusicFromMidi(midiData);
+                };
+                reader.readAsArrayBuffer(file);
+            }
+        });
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/@tonejs/midi@2.0.0/dist/Midi.min.js"></script>
