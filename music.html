@@ -3,25 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ピアノと猫ボイス - MIDIと猫の音声アップロード</title>
-    <script src="https://cdn.jsdelivr.net/npm/vexflow/releases/3.0.9/vexflow-min.js"></script>
+    <title>ピアノと猫ボイス - アップロード式</title>
     <script src="https://cdn.jsdelivr.net/npm/midi.js"></script>
 </head>
 <body>
     <h1>ピアノと猫ボイス</h1>
 
+    <label for="cat-sound">猫の鳴き声ファイルをアップロード:</label>
+    <input type="file" id="cat-sound" accept="audio/*">
+    <br>
+
     <label for="midi-file">MIDIファイルを選択:</label>
     <input type="file" id="midi-file" accept=".mid,.midi">
     <br>
-    <label for="cat-sound-file">猫の音声ファイルを選択 (例: Meow.mp3):</label>
-    <input type="file" id="cat-sound-file" accept="audio/*">
-    <br>
     <button onclick="playUploadedMidi()">MIDIを再生</button>
-    <button onclick="saveCatSound()">猫の音声を保存</button>
 
     <div id="score"></div>
 
     <script>
+        // 猫の鳴き声ファイル
+        let catSoundUrl = '';
+
+        // 猫の鳴き声ファイルをアップロード
+        document.getElementById('cat-sound').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    catSoundUrl = e.target.result;
+                    console.log("猫の鳴き声ファイルがアップロードされました");
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // MIDIノート番号と対応するピッチ変更設定
+        const midiToPitchShift = {
+            60: 0,  // C4
+            61: 50, // C#4 (黒鍵)
+            62: 0,  // D4
+            63: 50, // D#4 (黒鍵)
+            64: 0,  // E4
+            65: 0,  // F4
+            66: 50, // F#4 (黒鍵)
+            67: 0,  // G4
+            68: 50, // G#4 (黒鍵)
+            69: 0,  // A4
+            70: 50, // A#4 (黒鍵)
+            71: 0,  // B4
+            72: 0,  // C5
+            // 他のノートも追加可能
+        };
+
         // MIDIの初期化
         MIDI.loadPlugin({
             soundfontUrl: "./soundfonts/",
@@ -30,8 +63,6 @@
                 console.log("MIDI plugin loaded");
             }
         });
-
-        let catAudio = null; // 猫の音声を格納する変数
 
         // MIDIファイルをアップロードして再生する関数
         function playUploadedMidi() {
@@ -56,46 +87,46 @@
             // MIDIデータの再生
             MIDI.Player.loadDataUri(URL.createObjectURL(new Blob([midiData])), function() {
                 MIDI.Player.start();
-                playCatSound(); // 猫の鳴き声再生
+                playCatSounds(); // MIDIノートに合わせて猫の鳴き声再生
             });
         }
 
-        // 猫の音声ファイルを読み込む
-        document.getElementById('cat-sound-file').addEventListener('change', function(event) {
-            const file = event.target.files[0];
-
-            if (file) {
-                const url = URL.createObjectURL(file);
-                catAudio = new Audio(url);
-                alert("猫の音声ファイルが読み込まれました！");
-            }
-        });
-
-        // 猫の鳴き声を再生する関数
-        function playCatSound() {
-            if (catAudio) {
-                catAudio.currentTime = 0;  // 音声を最初から再生
-                catAudio.play();
-            } else {
-                alert("猫の音声ファイルが選択されていません。");
-            }
+        // MIDIのノートに合わせて猫の鳴き声を再生する関数
+        function playCatSounds() {
+            const events = MIDI.Player.getEvents();
+            
+            events.forEach(event => {
+                if (event.message[0] === 144) { // ノートオンイベント
+                    const midiNote = event.message[1];
+                    const pitchShift = midiToPitchShift[midiNote];
+                    if (pitchShift !== undefined && catSoundUrl) {
+                        playCatSoundWithPitch(midiNote, pitchShift);
+                    }
+                }
+            });
         }
 
-        // 猫の音声を保存する関数
-        function saveCatSound() {
-            if (!catAudio) {
-                alert("猫の音声ファイルが選択されていません。");
+        // 猫の音声を再生し、ピッチを変更する関数
+        function playCatSoundWithPitch(midiNote, pitchShift) {
+            if (!catSoundUrl) {
+                console.log("猫の鳴き声ファイルがアップロードされていません");
                 return;
             }
 
-            // Blobを使って音声ファイルを保存
-            catAudio.pause();
-            catAudio.currentTime = 0;
+            const audio = new Audio(catSoundUrl);
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const source = audioContext.createMediaElementSource(audio);
+            const gainNode = audioContext.createGain();
+            const pitchShiftNode = audioContext.createGain(); // ピッチシフターとして設定
 
-            const link = document.createElement('a');
-            link.href = catAudio.src;
-            link.download = "saved_cat_sound.mp3"; // 保存するファイル名
-            link.click();
+            // ピッチを変更（ピッチシフトの調整）
+            pitchShiftNode.gain.value = pitchShift / 100; // pitchShiftを調整（例えば、50で半音上げる）
+
+            source.connect(pitchShiftNode);
+            pitchShiftNode.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+
+            audio.play();
         }
     </script>
 </body>
