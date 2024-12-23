@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ピアノと猫ボイス - 音楽保存</title>
-    <script src="https://cdn.jsdelivr.net/npm/midi.js"></script>
+    <title>ピアノと猫ボイス</title>
 </head>
 <body>
     <h1>ピアノと猫ボイス</h1>
@@ -16,62 +15,16 @@
     <label for="midi-file">MIDIファイルを選択:</label>
     <input type="file" id="midi-file" accept=".mid,.midi">
     <br>
-    <button onclick="playAndSave()">音楽を再生して保存</button>
+    <button onclick="playMusic()">音楽を再生</button>
+    <button onclick="saveMusic()">音楽を保存</button>
 
     <div id="score"></div>
 
     <script>
-        // 猫の鳴き声ファイル
         let catSoundUrl = '';
-
-        // MIDIノート番号と対応するピッチ変更設定
-        const midiToPitchShift = {
-            60: 0,  // C4
-            61: 50, // C#4 (黒鍵)
-            62: 0,  // D4
-            63: 50, // D#4 (黒鍵)
-            64: 0,  // E4
-            65: 0,  // F4
-            66: 50, // F#4 (黒鍵)
-            67: 0,  // G4
-            68: 50, // G#4 (黒鍵)
-            69: 0,  // A4
-            70: 50, // A#4 (黒鍵)
-            71: 0,  // B4
-            72: 0,  // C5
-            73: 50, // C#5 (黒鍵)
-            74: 0,  // D5
-            75: 50, // D#5 (黒鍵)
-            76: 0,  // E5
-            77: 0,  // F5
-            78: 50, // F#5 (黒鍵)
-            79: 0,  // G5
-            80: 50, // G#5 (黒鍵)
-            81: 0,  // A5
-            82: 50, // A#5 (黒鍵)
-            83: 0,  // B5
-            84: 0,  // C6
-            85: 50, // C#6 (黒鍵)
-            86: 0,  // D6
-            87: 50, // D#6 (黒鍵)
-            88: 0,  // E6
-            89: 0,  // F6
-            90: 50, // F#6 (黒鍵)
-            91: 0,  // G6
-            92: 50, // G#6 (黒鍵)
-            93: 0,  // A6
-            94: 50, // A#6 (黒鍵)
-            95: 0,  // B6
-        };
-
-        // MIDIの初期化
-        MIDI.loadPlugin({
-            soundfontUrl: "./soundfonts/",
-            instrument: "acoustic_grand_piano",
-            onsuccess: function() {
-                console.log("MIDI plugin loaded");
-            }
-        });
+        let audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        let catSoundBuffer = null;
+        let combinedAudioBuffer = null;
 
         // 猫の鳴き声ファイルをアップロード
         document.getElementById('cat-sound').addEventListener('change', function(event) {
@@ -80,14 +33,30 @@
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     catSoundUrl = e.target.result;
-                    console.log("猫の鳴き声ファイルがアップロードされました");
+                    loadCatSound();
                 };
                 reader.readAsDataURL(file);
             }
         });
 
+        // 猫の音声をロード
+        function loadCatSound() {
+            fetch(catSoundUrl)
+                .then(response => response.arrayBuffer())
+                .then(data => {
+                    audioContext.decodeAudioData(data, (buffer) => {
+                        catSoundBuffer = buffer;
+                        console.log("猫の鳴き声ファイルがロードされました");
+                    }).catch(err => {
+                        console.error("音声ファイルのデコードエラー:", err);
+                    });
+                }).catch(err => {
+                    console.error("音声ファイルの読み込みエラー:", err);
+                });
+        }
+
         // MIDIファイルをアップロードして再生する関数
-        function playAndSave() {
+        function playMusic() {
             const fileInput = document.getElementById('midi-file');
             const file = fileInput.files[0];
 
@@ -99,81 +68,93 @@
             const reader = new FileReader();
             reader.onload = function(event) {
                 const midiData = event.target.result;
-                playMidiAndSave(midiData);
+                playMidi(midiData);
             };
             reader.readAsArrayBuffer(file);
         }
 
-        // MIDIデータを再生し、音楽を保存する関数
-        function playMidiAndSave(midiData) {
-            // MIDIデータの再生
-            MIDI.Player.loadDataUri(URL.createObjectURL(new Blob([midiData])), function() {
-                MIDI.Player.start();
-                combineMidiAndCatSounds(midiData); // MIDIノートに合わせて猫の鳴き声再生
+        // MIDIデータを再生する関数
+        function playMidi(midiData) {
+            const midi = new Midi(midiData);
+            let startTime = audioContext.currentTime;
+
+            midi.tracks.forEach((track, trackIndex) => {
+                track.notes.forEach((note) => {
+                    playNoteWithCatSound(note, startTime);
+                    startTime += note.duration; // 次のノートが再生されるタイミング
+                });
             });
         }
 
-        // MIDIのノートに合わせて猫の鳴き声を再生し、音楽を作成する
-        function combineMidiAndCatSounds(midiData) {
-            const events = MIDI.Player.getEvents();
-
-            // MIDIのノートに合わせて猫の鳴き声を再生
-            events.forEach(event => {
-                if (event.message[0] === 144) { // ノートオンイベント
-                    const midiNote = event.message[1];
-                    const pitchShift = midiToPitchShift[midiNote];
-                    if (pitchShift !== undefined && catSoundUrl) {
-                        playCatSoundWithPitch(midiNote, pitchShift);
-                    }
-                }
-            });
-
-            // MIDIと猫の音声を組み合わせて変換し、保存
-            saveCombinedAudio();
+        // ノートの再生と猫の音声をピッチ変更して再生
+        function playNoteWithCatSound(note, startTime) {
+            // MIDIノート番号に基づきピッチを計算（C4を基準に）
+            const pitchShift = getPitchShiftForNote(note.midi);
+            playCatSound(note.time + startTime, pitchShift);
         }
 
-        // 猫の音声を再生し、ピッチを変更する関数
-        function playCatSoundWithPitch(midiNote, pitchShift) {
-            if (!catSoundUrl) {
-                console.log("猫の鳴き声ファイルがアップロードされていません");
+        // ノート番号に基づいてピッチを取得（簡易的な変更例）
+        function getPitchShiftForNote(midiNote) {
+            const pitchShiftMapping = {
+                60: 1.0,  // C4
+                61: 1.1,  // C#4
+                62: 1.2,  // D4
+                63: 1.3,  // D#4
+                64: 1.4,  // E4
+                65: 1.5,  // F4
+                66: 1.6,  // F#4
+                67: 1.7,  // G4
+                68: 1.8,  // G#4
+                69: 1.9,  // A4
+                70: 2.0,  // A#4
+                71: 2.1,  // B4
+                72: 2.2,  // C5
+                // 他のノートも必要に応じて追加
+            };
+            return pitchShiftMapping[midiNote] || 1.0;  // デフォルトは変更なし
+        }
+
+        // ピッチを変更して猫の音声を再生
+        function playCatSound(startTime, pitchShift) {
+            if (!catSoundBuffer) {
+                console.log("猫の鳴き声がロードされていません");
                 return;
             }
 
-            const audio = new Audio(catSoundUrl);
-            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            const source = audioContext.createMediaElementSource(audio);
-            const gainNode = audioContext.createGain();
-            const pitchShiftNode = audioContext.createGain(); // ピッチシフターとして設定
+            const source = audioContext.createBufferSource();
+            source.buffer = catSoundBuffer;
 
-            // ピッチを変更（ピッチシフトの調整）
-            pitchShiftNode.gain.value = pitchShift / 100; // pitchShiftを調整（例えば、50で半音上げる）
+            // ピッチシフト
+            source.playbackRate.setValueAtTime(pitchShift, audioContext.currentTime);
 
-            source.connect(pitchShiftNode);
-            pitchShiftNode.connect(gainNode);
-            gainNode.connect(audioContext.destination);
+            source.connect(audioContext.destination);
+            source.start(audioContext.currentTime + startTime);
 
-            // エラーハンドリングを追加
-            audio.onerror = function() {
-                alert("音声の再生に失敗しました。ファイルが正しい形式か確認してください。");
-            };
+            // 音声バッファを保存
+            if (!combinedAudioBuffer) {
+                combinedAudioBuffer = audioContext.createBuffer(2, audioContext.sampleRate * 30, audioContext.sampleRate); // 30秒程度の空のバッファ
+            }
 
-            audio.play().catch(error => {
-                alert("音声の再生中にエラーが発生しました。");
-                console.error("音声再生エラー:", error);
-            });
+            // 音声バッファへの書き込み（簡易的な方法、実際には音声を編集して結合する方法を考慮）
         }
 
-        // MIDIデータと猫の音声を組み合わせて音楽を保存する
-        function saveCombinedAudio() {
-            // 使用した音声をMP3に変換するため、音声の生成後に保存を行う
-            const audioBlob = new Blob([/* 組み合わせた音楽データ */], { type: 'audio/mp3' });
+        // 音楽を保存する
+        function saveMusic() {
+            if (!combinedAudioBuffer) {
+                alert("音楽がまだ再生されていません。");
+                return;
+            }
 
+            // 音楽を保存する処理（簡易的な保存例）
+            const audioBlob = new Blob([combinedAudioBuffer], { type: 'audio/wav' });
             const a = document.createElement('a');
             a.href = URL.createObjectURL(audioBlob);
-            a.download = 'combined_audio.mp3';
+            a.download = 'music_with_cat_sound.wav';
             a.click();
             console.log("音楽ファイルが保存されました");
         }
     </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tonejs/midi@2.0.0/dist/Midi.min.js"></script>
 </body>
 </html>
