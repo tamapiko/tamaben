@@ -1,211 +1,75 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ピアノと猫ボイス</title>
+    <title>Interactive Piano</title>
+    <style>
+        .piano { display: flex; }
+        .key { width: 50px; height: 200px; border: 1px solid black; }
+        .white { background-color: white; }
+        .black { width: 30px; height: 150px; position: relative; left: -15px; background-color: black; z-index: 1; }
+        .key:active { background-color: yellow; }
+    </style>
 </head>
 <body>
-    <h1>ピアノと猫ボイス</h1>
 
-    <label for="cat-sound">猫の鳴き声ファイルをアップロード:</label>
-    <input type="file" id="cat-sound" accept="audio/*">
-    <br>
+<div class="piano">
+    <!-- White keys -->
+    <div class="key white" id="C" onclick="playKey(0)"></div>
+    <div class="key white" id="D" onclick="playKey(2)"></div>
+    <div class="key white" id="E" onclick="playKey(4)"></div>
+    <div class="key white" id="F" onclick="playKey(5)"></div>
+    <div class="key white" id="G" onclick="playKey(7)"></div>
+    <div class="key white" id="A" onclick="playKey(9)"></div>
+    <div class="key white" id="B" onclick="playKey(11)"></div>
 
-    <label for="midi-file">MIDIファイルを選択:</label>
-    <input type="file" id="midi-file" accept=".mid,.midi">
-    <br>
-    <button onclick="saveMusic()">音楽を保存</button>
+    <!-- Black keys -->
+    <div class="key black" id="C#" onclick="playKey(1)"></div>
+    <div class="key black" id="D#" onclick="playKey(3)"></div>
+    <div class="key black" id="F#" onclick="playKey(6)"></div>
+    <div class="key black" id="G#" onclick="playKey(8)"></div>
+    <div class="key black" id="A#" onclick="playKey(10)"></div>
+</div>
 
-    <div id="score"></div>
+<script>
+// 音を鳴らす関数
+function 音を鳴らす(音声ファイル名) {
+    console.log(`${音声ファイル名}の音を鳴らす`);
+    const audio = new Audio(音声ファイル名);
+    audio.play();
+}
 
-    <script>
-        let catSoundUrl = '';
-        let audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        let catSoundBuffer = null;
-        let combinedAudioBuffer = null;
+// CV関数に基づいたキーの音を鳴らす
+function CV(音名, oct調整, 拍数) {
+    let 拍待ちカウント = 拍数;
+    console.log(`拍待ちカウントを${拍数}ずつ変える`);
 
-        // 白鍵と黒鍵のMIDIノート番号を定義
-        const whiteKeys = [60, 62, 64, 65, 67, 69, 71, 72, 74, 76, 77, 79, 81, 83, 84, 86, 88, 89, 91, 93, 95, 96];
-        const blackKeys = [61, 63, 66, 68, 70, 72, 73, 75, 78, 80, 82, 85, 87, 90, 92, 94, 97, 99, 101, 103, 105, 106];
+    let ピッチ = 音名 * Math.pow(2, oct調整 + 5 + 12 * (10 + 688));
+    console.log(`ピッチ: ${ピッチ}`);
 
-        // 猫の鳴き声ファイルをアップロード
-        document.getElementById('cat-sound').addEventListener('change', function(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    catSoundUrl = e.target.result;
-                    loadCatSound();
-                };
-                reader.readAsDataURL(file);
-            }
-        });
+    let 音階 = (音名 * Math.pow(2, oct調整 + 5 + 12 * (10 + 688))) % 12 + 1;
+    console.log(`${音階}番目`);
 
-        // 猫の音声をロード
-        function loadCatSound() {
-            fetch(catSoundUrl)
-                .then(response => response.arrayBuffer())
-                .then(data => {
-                    audioContext.decodeAudioData(data, (buffer) => {
-                        catSoundBuffer = buffer;
-                        console.log("猫の鳴き声ファイルがロードされました");
-                    }).catch(err => {
-                        console.log("音声ファイルのデコードエラー:", err);
-                    });
-                }).catch(err => {
-                    console.log("音声ファイルの読み込みエラー:", err);
-                });
-        }
+    const テンポ = 60;
+    if (0.469 * Math.pow(2, -0.005 * ピッチ) < Math.exp(拍数 / 60 / テンポ)) {
+        音を鳴らす("4.mp3");
+    } else if (0.292 * Math.pow(2, -0.005 * ピッチ) < Math.exp(拍数 / 60 / テンポ)) {
+        音を鳴らす("6.mp3");
+    } else if (0.251 * Math.pow(2, -0.0045 * ピッチ) < Math.exp(拍数 / 60 / テンポ)) {
+        音を鳴らす("8.mp3");
+    } else {
+        音を鳴らす("16.mp3");
+    }
 
-        // MIDIファイルをアップロードして音楽を作成
-        function createMusicFromMidi(midiData) {
-            const midi = new Midi(midiData);
-            let startTime = audioContext.currentTime;
-            let buffers = [];
+    console.log(`${拍数 - 0.08}拍休む`);
+}
 
-            midi.tracks.forEach((track, trackIndex) => {
-                track.notes.forEach((note) => {
-                    buffers.push(createNoteBuffer(note, startTime));
-                    startTime += note.duration; // 次のノートが再生されるタイミング
-                });
-            });
+// クリックされたキーに基づいて音を鳴らす
+function playKey(音名) {
+    CV(音名, 0, 4);
+}
+</script>
 
-            // 音楽のバッファを統合する（簡易的な方法）
-            combineBuffers(buffers);
-        }
-
-        // ノートの再生バッファを作成
-        function createNoteBuffer(note, startTime) {
-            return new Promise((resolve, reject) => {
-                // MIDIノート番号に基づきピッチを計算（C4を基準に）
-                const pitchShift = getPitchShiftForNote(note.midi);
-                playCatSound(startTime, pitchShift, resolve, reject);
-            });
-        }
-
-        // ノート番号に基づいてピッチを取得（簡易的な変更例）
-        function getPitchShiftForNote(midiNote) {
-            const pitchShiftMapping = {
-                60: 1.0,  // C4
-                61: 1.1,  // C#4
-                62: 1.2,  // D4
-                63: 1.3,  // D#4
-                64: 1.4,  // E4
-                65: 1.5,  // F4
-                66: 1.6,  // F#4
-                67: 1.7,  // G4
-                68: 1.8,  // G#4
-                69: 1.9,  // A4
-                70: 2.0,  // A#4
-                71: 2.1,  // B4
-                72: 2.2,  // C5
-                73: 2.3,  // C#5
-                74: 2.4,  // D5
-                75: 2.5,  // D#5
-                76: 2.6,  // E5
-                77: 2.7,  // F5
-                78: 2.8,  // F#5
-                79: 2.9,  // G5
-                80: 3.0,  // G#5
-                81: 3.1,  // A5
-                82: 3.2,  // A#5
-                83: 3.3,  // B5
-                84: 3.4,  // C6
-                85: 3.5,  // C#6
-                86: 3.6,  // D6
-                87: 3.7,  // D#6
-                88: 3.8,  // E6
-                89: 3.9,  // F6
-                90: 4.0,  // F#6
-                91: 4.1,  // G6
-                92: 4.2,  // G#6
-                93: 4.3,  // A6
-                94: 4.4,  // A#6
-                95: 4.5,  // B6
-                96: 4.6,  // C7
-            };
-
-            return pitchShiftMapping[midiNote] || 1.0;  // デフォルトは変更なし
-        }
-
-        // ピッチを変更して猫の音声を再生
-        function playCatSound(startTime, pitchShift, resolve, reject) {
-            if (!catSoundBuffer) {
-                console.log("猫の鳴き声がロードされていません");
-                reject("猫の鳴き声がロードされていません");
-                return;
-            }
-
-            const source = audioContext.createBufferSource();
-            source.buffer = catSoundBuffer;
-
-            // ピッチシフト
-            source.playbackRate.setValueAtTime(pitchShift, audioContext.currentTime);
-
-            source.connect(audioContext.destination);
-            source.start(audioContext.currentTime + startTime);
-
-            // 音声バッファへの書き込み（簡易的な方法、実際には音声を編集して結合する方法を考慮）
-            source.onended = () => {
-                resolve();
-            };
-        }
-
-        // 複数の音声バッファを統合する
-        function combineBuffers(buffers) {
-            if (buffers.length === 0) {
-                console.log("バッファがありません");
-                return;
-            }
-
-            // ここでは簡易的にすべての音声を順番に繋げるだけ
-            let totalDuration = buffers.reduce((acc, buffer) => acc + buffer.duration, 0);
-            let mergedBuffer = audioContext.createBuffer(2, audioContext.sampleRate * totalDuration, audioContext.sampleRate);
-
-            let currentTime = 0;
-            buffers.forEach(buffer => {
-                // バッファのデータをmergedBufferにコピーする
-                for (let channel = 0; channel < 2; channel++) {
-                    mergedBuffer.getChannelData(channel).set(buffer.getChannelData(channel), currentTime * audioContext.sampleRate);
-                }
-                currentTime += buffer.duration;
-            });
-
-            combinedAudioBuffer = mergedBuffer;
-            console.log("音楽が作成されました");
-        }
-
-        // 音楽を保存する
-        function saveMusic() {
-            if (!combinedAudioBuffer) {
-                console.log("音楽がまだ作成されていません");
-                return;
-            }
-
-            // 音楽を保存する処理（簡易的な保存例）
-            const audioBlob = new Blob([combinedAudioBuffer], { type: 'audio/wav' });
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(audioBlob);
-            a.download = 'music_with_cat_sound.wav';
-            a.click();
-            console.log("音楽ファイルが保存されました");
-        }
-
-        // MIDIファイルを選択して処理
-        document.getElementById('midi-file').addEventListener('change', function(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const midiData = e.target.result;
-                    createMusicFromMidi(midiData);
-                };
-                reader.readAsArrayBuffer(file);
-            }
-        });
-    </script>
-
-    <script src="https://cdn.jsdelivr.net/npm/@tonejs/midi@2.0.0/dist/Midi.min.js"></script>
 </body>
 </html>
