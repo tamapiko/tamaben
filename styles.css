@@ -67,6 +67,10 @@ button {
 }
 
 @media screen and (min-width: 640px) {
+    body .grade {
+        display: flex;
+        place-items: center; /* 水平・垂直方向の中央配置 */
+    }
     .maintenance img {
         width:20%;
         text-align:center;
