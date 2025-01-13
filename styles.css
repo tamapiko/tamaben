@@ -3,7 +3,11 @@ body {
     font-family:"Zen Kurenaido";
     color:#182246;
 }
-@media screen and (min-width: 640px) {
+@media screen and (max-width: 640px) {
+    body .grade {
+        display: flex;
+        place-items: center; /* 水平・垂直方向の中央配置 */
+    }
 .maintenance img {
     width:50%;
     text-align:center;
@@ -13,8 +17,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    text-align: center;
-    margin: 0 auto;
+    flex-direction:column;
 }
 .subject-txt {
     font-size:40px;
@@ -46,7 +49,7 @@ body {
     display: flex; /* フレックスボックスを使用 */
     justify-content: space-between; /* ボタン間にスペースを均等に */
     max-width: 400px; /* コンテナの最大幅を設定 */
-    margin: auto; /* コンテナを中央に配置 */
+    margin: auto; /* コンテナを中央に配置 */       /* 余白をなくす */
 }
 
 button {
@@ -58,14 +61,14 @@ button {
     color: #182246; /* 文字色を指定された色に設定 */
     font-size: 10px; /* フォントサイズ */
     cursor: pointer; /* カーソルをポインターに */
-    flex: 0.5; /* ボタンの幅を均等に */
+    flex: 1; /* ボタンの幅を均等に */
     margin: 0 2px; /* ボタン間の余白を設定 */
 }
 }
 
-@media screen and (max-width: 640px) {
+@media screen and (min-width: 640px) {
     .maintenance img {
-        width:50%;
+        width:20%;
         text-align:center;
     
     }
@@ -73,8 +76,7 @@ button {
         display: flex;
         justify-content: center;
         align-items: center;
-        text-align: center;
-        margin: 0 auto;
+        flex-direction:column;
     }
     .subject-txt {
         font-size:40px;
@@ -89,11 +91,10 @@ button {
     }
     .kokugo , .suugaku , .eigo , .rika , .shakai {
         display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction:column;
-        text-align:center;
-        
+        justify-content: center; /* 水平方向の中央配置 */
+        align-items: center;   /* 垂直方向の中央配置 */
+        height: 100vh;         /* ビューポート全体の高さを占める */
+        margin: 0;             /* 余白をなくす */
     }
     .subject img {
         width:70%;
@@ -104,9 +105,9 @@ button {
     
     .button-container {
         display: flex; /* フレックスボックスを使用 */
+        text-align: center;
         justify-content: space-between; /* ボタン間にスペースを均等に */
         max-width: 400px; /* コンテナの最大幅を設定 */
-        margin: auto; /* コンテナを中央に配置 */
     }
     
     button {
@@ -118,9 +119,6 @@ button {
         color: #182246; /* 文字色を指定された色に設定 */
         font-size: 10px; /* フォントサイズ */
         cursor: pointer; /* カーソルをポインターに */
-        flex: 0.5; /* ボタンの幅を均等に */
-        margin: 0 2px; /* ボタン間の余白を設定 */
+        flex: 0.5; /* ボタンの幅を親要素内で均等に */
     }
     }
-    
-    
