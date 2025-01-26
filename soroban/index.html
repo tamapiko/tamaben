@@ -26,14 +26,14 @@
             max-width: 900px;
             aspect-ratio: 2 / 1;
             overflow: hidden;
+            background-color: #8b4513; /* そろばんの木の色 */
+            border: 5px solid #000; /* そろばんの枠線 */
+            border-radius: 10px;
         }
         .bead {
             position: absolute;
-            cursor: grab;
+            cursor: pointer;
             transition: transform 0.3s ease;
-        }
-        .bead:active {
-            cursor: grabbing;
         }
         #soroban-svg {
             width: 100%;
@@ -72,29 +72,10 @@
                     upperBead.classList.add("bead");
                     upperBead.style.left = `${50 + i * columnWidth}px`;
                     upperBead.style.top = `${upperBeadY}px`;
-
-                    // ドラッグ操作
-                    let isDragging = false;
-                    let startX;
-
-                    upperBead.addEventListener("mousedown", (e) => {
-                        isDragging = true;
-                        startX = e.clientX;
-                        upperBead.style.transition = "none"; // スムーズなアニメーションを一時的に無効にする
+                    upperBead.addEventListener("click", () => {
+                        const isDown = upperBead.style.transform === "translateY(50px)";
+                        upperBead.style.transform = isDown ? "translateY(0)" : "translateY(50px)";
                     });
-
-                    document.addEventListener("mousemove", (e) => {
-                        if (isDragging) {
-                            const moveX = e.clientX - startX;
-                            upperBead.style.left = `${50 + i * columnWidth + moveX}px`;
-                        }
-                    });
-
-                    document.addEventListener("mouseup", () => {
-                        isDragging = false;
-                        upperBead.style.transition = "transform 0.3s ease"; // アニメーションを再度有効にする
-                    });
-
                     sorobanContainer.appendChild(upperBead);
 
                     // 下珠
@@ -104,12 +85,10 @@
                         lowerBead.classList.add("bead");
                         lowerBead.style.left = `${50 + i * columnWidth}px`;
                         lowerBead.style.top = `${lowerBeadStartY + j * beadSpacing}px`;
-
                         lowerBead.addEventListener("click", () => {
                             const isUp = lowerBead.style.transform === "translateY(-50px)";
                             lowerBead.style.transform = isUp ? "translateY(0)" : "translateY(-50px)";
                         });
-
                         sorobanContainer.appendChild(lowerBead);
                     }
                 }
