@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>そろばんシミュレーター</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#f5f5f5">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f5f5f5;
+            margin: 0;
+        }
+        #soroban-container {
+            position: relative;
+            width: 500px;
+            height: auto;
+        }
+        .bead {
+            position: absolute;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div id="soroban-container">
+        <img src="そろばん.svg" alt="そろばん" id="soroban-svg">
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const sorobanContainer = document.getElementById("soroban-container");
+            const beadSvgPath = "珠.svg";
+
+            const columns = 13;
+            const upperBeadY = 20;
+            const lowerBeadStartY = 150;
+            const beadSpacing = 50;
+
+            for (let i = 0; i < columns; i++) {
+                const upperBead = document.createElement("img");
+                upperBead.src = beadSvgPath;
+                upperBead.classList.add("bead");
+                upperBead.style.left = `${50 + i * 40}px`;
+                upperBead.style.top = `${upperBeadY}px`;
+                upperBead.addEventListener("click", () => {
+                    const isDown = upperBead.style.transform === "translateY(50px)";
+                    upperBead.style.transform = isDown ? "translateY(0)" : "translateY(50px)";
+                });
+                sorobanContainer.appendChild(upperBead);
+
+                for (let j = 0; j < 4; j++) {
+                    const lowerBead = document.createElement("img");
+                    lowerBead.src = beadSvgPath;
+                    lowerBead.classList.add("bead");
+                    lowerBead.style.left = `${50 + i * 40}px`;
+                    lowerBead.style.top = `${lowerBeadStartY + j * beadSpacing}px`;
+                    lowerBead.addEventListener("click", () => {
+                        const isUp = lowerBead.style.transform === "translateY(-50px)";
+                        lowerBead.style.transform = isUp ? "translateY(0)" : "translateY(-50px)";
+                    });
+                    sorobanContainer.appendChild(lowerBead);
+                }
+            }
+        });
+
+        // Register the service worker for PWA
+        if ("serviceWorker" in navigator) {
+            navigator.serviceWorker.register("sw.js").then(() => {
+                console.log("Service Worker registered.");
+            }).catch(error => {
+                console.error("Service Worker registration failed:", error);
+            });
+        }
+    </script>
+</body>
+</html>
