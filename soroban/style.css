@@ -17,13 +17,15 @@ body {
   justify-content: space-evenly;
   align-items: center;
   margin-top: 20px;
+  flex-wrap: nowrap;
 }
 
 .rod {
   position: relative;
+  width: 2cm;
   height: 10cm;
-  width: 1cm;
-  background-color: #000;
+  background-color: #8B4513;  /* 木の色 */
+  margin: 0 0.5cm;
 }
 
 .bead {
@@ -31,4 +33,12 @@ body {
   background-color: #f00;
   border-radius: 50%;
   transition: bottom 0.3s;
+}
+
+.top-bead {
+  top: 0;
+}
+
+.bottom-bead {
+  bottom: 0;
 }
