@@ -1,117 +1,24 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, orientation=landscape">
-    <title>そろばんシミュレーター</title>
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#f5f5f5">
-    <style>
-        body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            margin: 0;
-            height: 100vh;
-            background-color: #f5f5f5;
-        }
-        #controls {
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        #soroban-container {
-            position: relative;
-            width: 100%;
-            max-width: 900px;
-            aspect-ratio: 2 / 1;
-            overflow: hidden;
-            background-color: #8b4513; /* そろばんの木の色 */
-            border: 5px solid #000; /* そろばんの枠線 */
-            border-radius: 10px;
-        }
-        .bead {
-            position: absolute;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-        #soroban-svg {
-            width: 100%;
-            height: auto;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>そろばん</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="controls">
-        <label for="column-count">桁数を選択 (1〜15): </label>
-        <input id="column-count" type="number" min="1" max="15" value="13">
-        <button id="generate">生成</button>
-    </div>
-    <div id="soroban-container">
-        <img src="そろばん.svg" alt="そろばん" id="soroban-svg">
-    </div>
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const sorobanContainer = document.getElementById("soroban-container");
-            const columnInput = document.getElementById("column-count");
-            const generateButton = document.getElementById("generate");
-            const beadSvgPath = "珠.svg";
+  <div class="settings">
+    <label for="num-beads">桁数:</label>
+    <input type="number" id="num-beads" value="5" min="1" max="15">
+    <label for="bead-size">珠の大きさ:</label>
+    <input type="number" id="bead-size" value="1" min="0.5" max="2" step="0.1">
+    <button id="apply-settings">設定を適用</button>
+  </div>
 
-            const createSoroban = (columns) => {
-                sorobanContainer.innerHTML = '<img src="そろばん.svg" alt="そろばん" id="soroban-svg">';
+  <div class="soroban" id="soroban">
+    <!-- ここに動的にそろばんを生成 -->
+  </div>
 
-                const upperBeadY = 20;
-                const lowerBeadStartY = 150;
-                const beadSpacing = 50;
-                const columnWidth = 50; // 横幅の間隔
-
-                for (let i = 0; i < columns; i++) {
-                    // 上珠
-                    const upperBead = document.createElement("img");
-                    upperBead.src = beadSvgPath;
-                    upperBead.classList.add("bead");
-                    upperBead.style.left = `${50 + i * columnWidth}px`;
-                    upperBead.style.top = `${upperBeadY}px`;
-                    upperBead.addEventListener("click", () => {
-                        const isDown = upperBead.style.transform === "translateY(50px)";
-                        upperBead.style.transform = isDown ? "translateY(0)" : "translateY(50px)";
-                    });
-                    sorobanContainer.appendChild(upperBead);
-
-                    // 下珠
-                    for (let j = 0; j < 4; j++) {
-                        const lowerBead = document.createElement("img");
-                        lowerBead.src = beadSvgPath;
-                        lowerBead.classList.add("bead");
-                        lowerBead.style.left = `${50 + i * columnWidth}px`;
-                        lowerBead.style.top = `${lowerBeadStartY + j * beadSpacing}px`;
-                        lowerBead.addEventListener("click", () => {
-                            const isUp = lowerBead.style.transform === "translateY(-50px)";
-                            lowerBead.style.transform = isUp ? "translateY(0)" : "translateY(-50px)";
-                        });
-                        sorobanContainer.appendChild(lowerBead);
-                    }
-                }
-            };
-
-            // 初期化 (デフォルト13桁)
-            createSoroban(parseInt(columnInput.value, 10));
-
-            // ボタンイベント
-            generateButton.addEventListener("click", () => {
-                const columns = Math.min(Math.max(parseInt(columnInput.value, 10), 1), 15);
-                createSoroban(columns);
-            });
-        });
-
-        // Service Workerの登録
-        if ("serviceWorker" in navigator) {
-            navigator.serviceWorker.register("sw.js").then(() => {
-                console.log("Service Workerが登録されました。");
-            }).catch(error => {
-                console.error("Service Worker登録失敗:", error);
-            });
-        }
-    </script>
+  <script src="script.js"></script>
 </body>
 </html>
