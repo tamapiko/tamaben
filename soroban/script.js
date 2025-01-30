@@ -1,3 +1,8 @@
+// メニューのトグル表示
+document.getElementById('menu-toggle').addEventListener('click', function() {
+  document.getElementById('settings-panel').classList.toggle('show');
+});
+
 // 初期設定のロード
 document.addEventListener('DOMContentLoaded', function() {
   const storedBeads = localStorage.getItem('numBeads') || 5;
@@ -37,12 +42,17 @@ function applySettings() {
     rod.classList.add('rod');
     soroban.appendChild(rod);
 
-    const topBead = document.createElement('div');
-    topBead.classList.add('bead', 'top-bead');
-    topBead.style.width = `${beadSize}cm`;
-    topBead.style.height = `${beadSize}cm`;
-    rod.appendChild(topBead);
+    // 五珠と一珠の間に区切り線を挿入
+    const separator = document.createElement('div');
+    separator.classList.add('separator');
+    rod.appendChild(separator);
 
+    // 定位点の追加
+    const dot = document.createElement('div');
+    dot.classList.add('dot');
+    separator.appendChild(dot);
+
+    // 一珠は下に配置、五珠は上に配置
     const bottomBeads = [];
     for (let j = 0; j < 4; j++) {
       const bottomBead = document.createElement('div');
@@ -53,7 +63,13 @@ function applySettings() {
       bottomBeads.push(bottomBead);
     }
 
-    // 初期位置を設定（珠を上に配置）
+    const topBead = document.createElement('div');
+    topBead.classList.add('bead', 'top-bead');
+    topBead.style.width = `${beadSize}cm`;
+    topBead.style.height = `${beadSize}cm`;
+    rod.appendChild(topBead);
+
+    // 初期位置を設定（五珠は上に配置、一珠は下に配置）
     topBead.style.top = '0';
     bottomBeads.forEach(bead => {
       bead.style.bottom = `${beadSize}cm`;  // 初期状態で珠が下に配置
