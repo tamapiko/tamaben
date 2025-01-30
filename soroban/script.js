@@ -32,18 +32,27 @@ function applySettings() {
     rod.classList.add('rod');
     soroban.appendChild(rod);
 
-    const bead1 = document.createElement('div');
-    bead1.classList.add('bead');
-    bead1.style.width = `${beadSize}cm`;
-    bead1.style.height = `${beadSize}cm`;
-    rod.appendChild(bead1);
+    const topBead = document.createElement('div');
+    topBead.classList.add('bead', 'top-bead');
+    topBead.style.width = `${beadSize}cm`;
+    topBead.style.height = `${beadSize}cm`;
+    rod.appendChild(topBead);
 
-    const bead2 = document.createElement('div');
-    bead2.classList.add('bead');
-    bead2.style.width = `${beadSize}cm`;
-    bead2.style.height = `${beadSize}cm`;
-    bead2.style.bottom = `${beadSize * 2}cm`;  // 上部の珠
-    rod.appendChild(bead2);
+    const bottomBeads = [];
+    for (let j = 0; j < 4; j++) {
+      const bottomBead = document.createElement('div');
+      bottomBead.classList.add('bead', 'bottom-bead');
+      bottomBead.style.width = `${beadSize}cm`;
+      bottomBead.style.height = `${beadSize}cm`;
+      rod.appendChild(bottomBead);
+      bottomBeads.push(bottomBead);
+    }
+
+    // 初期位置を設定（珠を上に配置）
+    topBead.style.top = '0';
+    bottomBeads.forEach(bead => {
+      bead.style.bottom = `${beadSize}cm`;  // 初期状態で珠が下に配置
+    });
   }
 
   // タッチ操作の設定
