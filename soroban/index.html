@@ -10,8 +10,16 @@
   <div class="settings">
     <label for="num-beads">桁数:</label>
     <input type="number" id="num-beads" value="5" min="1" max="15">
+    
     <label for="bead-size">珠の大きさ:</label>
     <input type="number" id="bead-size" value="1" min="0.5" max="2" step="0.1">
+
+    <label for="operation-mode">操作モード:</label>
+    <select id="operation-mode">
+      <option value="slide">スライド</option>
+      <option value="touch">タッチ</option>
+    </select>
+    
     <button id="apply-settings">設定を適用</button>
   </div>
 
