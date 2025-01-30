@@ -7,25 +7,26 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="settings">
-    <label for="num-beads">桁数:</label>
-    <input type="number" id="num-beads" value="5" min="1" max="15">
-    
-    <label for="bead-size">珠の大きさ:</label>
-    <input type="number" id="bead-size" value="1" min="0.5" max="2" step="0.1">
-
-    <label for="operation-mode">操作モード:</label>
-    <select id="operation-mode">
-      <option value="slide">スライド</option>
-      <option value="touch">タッチ</option>
-    </select>
-    
-    <button id="apply-settings">設定を適用</button>
+  <div class="menu-toggle" id="menu-toggle">&#9776;</div>
+  <div class="settings-panel" id="settings-panel">
+    <div class="settings">
+      <label for="num-beads">珠の数: </label>
+      <input type="number" id="num-beads" min="1" max="20" value="5">
+      <br>
+      <label for="bead-size">珠のサイズ (cm): </label>
+      <input type="number" id="bead-size" min="1" max="3" value="1">
+      <br>
+      <label for="operation-mode">操作方法: </label>
+      <select id="operation-mode">
+        <option value="slide">スライド</option>
+        <option value="touch">タッチ</option>
+      </select>
+      <br>
+      <button id="apply-settings">設定を適用</button>
+    </div>
   </div>
 
-  <div class="soroban" id="soroban">
-    <!-- ここに動的にそろばんを生成 -->
-  </div>
+  <div id="soroban"></div>
 
   <script src="script.js"></script>
 </body>
