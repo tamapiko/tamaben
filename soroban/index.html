@@ -3,30 +3,44 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>そろばん</title>
+  <title>そろばんアプリ</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="menu-toggle" id="menu-toggle">&#9776;</div>
-  <div class="settings-panel" id="settings-panel">
-    <div class="settings">
-      <label for="num-beads">珠の数: </label>
-      <input type="number" id="num-beads" min="1" max="20" value="5">
-      <br>
-      <label for="bead-size">珠のサイズ (cm): </label>
-      <input type="number" id="bead-size" min="1" max="3" value="1">
-      <br>
-      <label for="operation-mode">操作方法: </label>
-      <select id="operation-mode">
-        <option value="slide">スライド</option>
-        <option value="touch">タッチ</option>
-      </select>
-      <br>
-      <button id="apply-settings">設定を適用</button>
+  <!-- ハンバーガーメニュー -->
+  <button id="menu-toggle" class="menu-button">≡</button>
+  <div id="settings-panel" class="settings-panel">
+    <h2>設定</h2>
+    <label for="num-beads">桁数:</label>
+    <input type="number" id="num-beads" value="5" min="1" max="15">
+
+    <label for="bead-size">珠のサイズ:</label>
+    <input type="number" id="bead-size" value="1" min="1" max="5">
+
+    <label for="operation-mode">操作モード:</label>
+    <select id="operation-mode">
+      <option value="slide">スライド</option>
+      <option value="touch">タッチ</option>
+    </select>
+
+    <label for="linking-enabled">連結機能:</label>
+    <input type="checkbox" id="linking-enabled">
+    
+    <div id="connection-code" style="display:none;">
+      <h3>接続コード</h3>
+      <input type="text" id="connection-code-display" readonly>
+      <p>このコードを他の端末で入力してください。</p>
     </div>
+
+    <label for="linking-code-input">接続コード入力:</label>
+    <input type="text" id="linking-code-input">
+    <button id="connect-button">接続</button>
+
+    <button id="apply-settings">設定を適用</button>
   </div>
 
-  <div id="soroban"></div>
+  <!-- そろばん -->
+  <div id="soroban" class="soroban"></div>
 
   <script src="script.js"></script>
 </body>
