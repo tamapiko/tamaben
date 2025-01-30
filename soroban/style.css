@@ -18,21 +18,26 @@ body {
   align-items: center;
   margin-top: 20px;
   flex-wrap: nowrap;
+  background-color: #f7f7f7;
+  border: 2px solid #d3d3d3;
+  padding: 20px;
+  border-radius: 8px;
 }
 
 .rod {
   position: relative;
   width: 2cm;
-  height: 10cm;
-  background-color: #8B4513;  /* 木の色 */
+  height: 12cm;
+  background-color: #8B4513; /* 木の色 */
   margin: 0 0.5cm;
+  border-radius: 10px;
 }
 
 .bead {
   position: absolute;
-  background-color: #f00;
+  background-color: #F0C25C;  /* 珠の色（黄色） */
   border-radius: 50%;
-  transition: bottom 0.3s;
+  transition: top 0.3s, bottom 0.3s;
 }
 
 .top-bead {
@@ -41,4 +46,8 @@ body {
 
 .bottom-bead {
   bottom: 0;
+}
+
+#apply-settings {
+  margin-top: 20px;
 }
