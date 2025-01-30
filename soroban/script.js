@@ -1,3 +1,6 @@
+// BroadcastChannelの初期化
+let channel = null;
+
 // メニューのトグル表示
 document.getElementById('menu-toggle').addEventListener('click', function() {
   document.getElementById('settings-panel').classList.toggle('show');
@@ -8,141 +11,107 @@ document.addEventListener('DOMContentLoaded', function() {
   const storedBeads = localStorage.getItem('numBeads') || 5;
   const storedBeadSize = localStorage.getItem('beadSize') || 1;
   const storedMode = localStorage.getItem('operationMode') || 'slide';
+  const storedLinkingEnabled = localStorage.getItem('linkingEnabled') === 'true';
 
   document.getElementById('num-beads').value = storedBeads;
   document.getElementById('bead-size').value = storedBeadSize;
   document.getElementById('operation-mode').value = storedMode;
+  document.getElementById('linking-enabled').checked = storedLinkingEnabled;
 
   applySettings();  // 設定を適用
 });
 
-// 設定をローカルストレージに保存
+// 設定をローカルストレージに保存し、BroadcastChannelで状態を送信
 document.getElementById('apply-settings').addEventListener('click', function() {
   const numBeads = document.getElementById('num-beads').value;
   const beadSize = document.getElementById('bead-size').value;
   const operationMode = document.getElementById('operation-mode').value;
+  const linkingEnabled = document.getElementById('linking-enabled').checked;
 
   localStorage.setItem('numBeads', numBeads);
   localStorage.setItem('beadSize', beadSize);
   localStorage.setItem('operationMode', operationMode);
+  localStorage.setItem('linkingEnabled', linkingEnabled);
 
-  applySettings();
+  applySettings();  // 設定適用
 });
 
+// 設定適用
 function applySettings() {
   const numBeads = document.getElementById('num-beads').value;
   const beadSize = document.getElementById('bead-size').value;
   const operationMode = document.getElementById('operation-mode').value;
-  const soroban = document.getElementById('soroban');
+  const linkingEnabled = document.getElementById('linking-enabled').checked;
 
-  soroban.innerHTML = '';  // 既存のそろばんをクリア
+  // そろばんの描画を更新
+  drawSoroban(numBeads, beadSize, operationMode);
 
-  for (let i = 0; i < numBeads; i++) {
-    const rod = document.createElement('div');
-    rod.classList.add('rod');
-    soroban.appendChild(rod);
+  if (linkingEnabled) {
+    // 連結機能がONの場合
+    const connectionCode = generateConnectionCode();
+    document.getElementById('connection-code').style.display = 'block';
+    document.getElementById('connection-code-display').value = connectionCode;
 
-    // 五珠と一珠の間に区切り線を挿入
-    const separator = document.createElement('div');
-    separator.classList.add('separator');
-    rod.appendChild(separator);
-
-    // 定位点の追加
-    const dot = document.createElement('div');
-    dot.classList.add('dot');
-    separator.appendChild(dot);
-
-    // 一珠は下に配置、五珠は上に配置
-    const bottomBeads = [];
-    for (let j = 0; j < 4; j++) {
-      const bottomBead = document.createElement('div');
-      bottomBead.classList.add('bead', 'bottom-bead');
-      bottomBead.style.width = `${beadSize}cm`;
-      bottomBead.style.height = `${beadSize}cm`;
-      rod.appendChild(bottomBead);
-      bottomBeads.push(bottomBead);
+    // BroadcastChannelで接続情報を送信
+    if (channel) {
+      channel.close();
     }
-
-    const topBead = document.createElement('div');
-    topBead.classList.add('bead', 'top-bead');
-    topBead.style.width = `${beadSize}cm`;
-    topBead.style.height = `${beadSize}cm`;
-    rod.appendChild(topBead);
-
-    // 初期位置を設定（五珠は上に配置、一珠は下に配置）
-    topBead.style.top = '0';
-    bottomBeads.forEach(bead => {
-      bead.style.bottom = `${beadSize}cm`;  // 初期状態で珠が下に配置
-    });
-  }
-
-  // 操作モードの選択
-  if (operationMode === 'slide') {
-    applySlideOperation();
+    channel = new BroadcastChannel(connectionCode);
+    channel.postMessage({ type: 'connect', code: connectionCode });
   } else {
-    applyTouchOperation();
+    // 連結機能がOFFの場合、BroadcastChannelを閉じる
+    if (channel) {
+      channel.close();
+      channel = null;
+    }
   }
 }
 
-// スライド操作モード
-function applySlideOperation() {
-  const beads = document.querySelectorAll('.bead');
-  beads.forEach(bead => {
-    bead.addEventListener('mousedown', onSlideStart);
-    bead.addEventListener('mousemove', onSlideMove);
-  });
+// 接続コード生成
+function generateConnectionCode() {
+  return Math.random().toString(36).substr(2, 6); // ランダムな6文字
 }
 
-let beadBeingMoved = null;
-let initialX = 0;
-
-function onSlideStart(event) {
-  beadBeingMoved = event.target;
-  initialX = event.clientX;
-}
-
-function onSlideMove(event) {
-  if (beadBeingMoved) {
-    const deltaX = event.clientX - initialX;
-    let newX = parseFloat(beadBeingMoved.style.left || 0) + deltaX;
-    newX = Math.max(0, Math.min(2, newX));  // 桁内での動きに制限
-    beadBeingMoved.style.left = `${newX}cm`;
-    initialX = event.clientX;
+// 接続コード入力
+document.getElementById('connect-button').addEventListener('click', function() {
+  const inputCode = document.getElementById('linking-code-input').value.trim();
+  
+  if (inputCode && channel) {
+    // 他の端末と接続
+    if (channel) {
+      channel.postMessage({ type: 'connect', code: inputCode });
+    }
   }
-}
-
-document.body.addEventListener('mouseup', () => {
-  beadBeingMoved = null;
 });
 
-// タッチ操作モード
-function applyTouchOperation() {
-  const beads = document.querySelectorAll('.bead');
-  beads.forEach(bead => {
-    bead.addEventListener('touchstart', onTouchStart);
-    bead.addEventListener('touchmove', onTouchMove);
-  });
+// 接続された端末からのメッセージを受け取る
+if (channel) {
+  channel.onmessage = (event) => {
+    const message = event.data;
+    if (message.type === 'connect') {
+      // 他の端末と接続された時の処理
+      console.log('接続された:', message.code);
+    }
+  };
 }
 
-let initialY = 0;
+// そろばんの描画関数
+function drawSoroban(numBeads, beadSize, operationMode) {
+  const sorobanElement = document.getElementById('soroban');
+  sorobanElement.innerHTML = ''; // 既存のそろばんをクリア
 
-function onTouchStart(event) {
-  beadBeingMoved = event.target;
-  initialY = event.touches[0].clientY;
-}
+  // そろばんの桁数と珠のサイズを設定
+  for (let i = 0; i < numBeads; i++) {
+    const bead = document.createElement('div');
+    bead.classList.add('soroban-bead');
+    bead.style.width = `${beadSize * 10}px`;  // 珠のサイズに応じて幅を調整
+    bead.style.height = `${beadSize * 10}px`;
 
-function onTouchMove(event) {
-  if (beadBeingMoved) {
-    const deltaY = event.touches[0].clientY - initialY;
-    let newY = parseFloat(beadBeingMoved.style.bottom || 0) + deltaY;
-    newY = Math.min(5.5, Math.max(0, newY));  // 桁内での動きに制限
-    beadBeingMoved.style.bottom = `${newY}cm`;
-    initialY = event.touches[0].clientY;
+    // 珠をクリック可能に
+    bead.addEventListener('click', function() {
+      bead.classList.toggle('active');
+    });
+
+    sorobanElement.appendChild(bead);
   }
 }
-
-document.body.addEventListener('touchend', () => {
-  beadBeingMoved = null;
-});
-
-applySettings();  // 初期設定適用
