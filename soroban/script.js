@@ -2,9 +2,11 @@
 document.addEventListener('DOMContentLoaded', function() {
   const storedBeads = localStorage.getItem('numBeads') || 5;
   const storedBeadSize = localStorage.getItem('beadSize') || 1;
+  const storedMode = localStorage.getItem('operationMode') || 'slide';
 
   document.getElementById('num-beads').value = storedBeads;
   document.getElementById('bead-size').value = storedBeadSize;
+  document.getElementById('operation-mode').value = storedMode;
 
   applySettings();  // 設定を適用
 });
@@ -13,9 +15,11 @@ document.addEventListener('DOMContentLoaded', function() {
 document.getElementById('apply-settings').addEventListener('click', function() {
   const numBeads = document.getElementById('num-beads').value;
   const beadSize = document.getElementById('bead-size').value;
+  const operationMode = document.getElementById('operation-mode').value;
 
   localStorage.setItem('numBeads', numBeads);
   localStorage.setItem('beadSize', beadSize);
+  localStorage.setItem('operationMode', operationMode);
 
   applySettings();
 });
@@ -23,6 +27,7 @@ document.getElementById('apply-settings').addEventListener('click', function() {
 function applySettings() {
   const numBeads = document.getElementById('num-beads').value;
   const beadSize = document.getElementById('bead-size').value;
+  const operationMode = document.getElementById('operation-mode').value;
   const soroban = document.getElementById('soroban');
 
   soroban.innerHTML = '';  // 既存のそろばんをクリア
@@ -55,7 +60,47 @@ function applySettings() {
     });
   }
 
-  // タッチ操作の設定
+  // 操作モードの選択
+  if (operationMode === 'slide') {
+    applySlideOperation();
+  } else {
+    applyTouchOperation();
+  }
+}
+
+// スライド操作モード
+function applySlideOperation() {
+  const beads = document.querySelectorAll('.bead');
+  beads.forEach(bead => {
+    bead.addEventListener('mousedown', onSlideStart);
+    bead.addEventListener('mousemove', onSlideMove);
+  });
+}
+
+let beadBeingMoved = null;
+let initialX = 0;
+
+function onSlideStart(event) {
+  beadBeingMoved = event.target;
+  initialX = event.clientX;
+}
+
+function onSlideMove(event) {
+  if (beadBeingMoved) {
+    const deltaX = event.clientX - initialX;
+    let newX = parseFloat(beadBeingMoved.style.left || 0) + deltaX;
+    newX = Math.max(0, Math.min(2, newX));  // 桁内での動きに制限
+    beadBeingMoved.style.left = `${newX}cm`;
+    initialX = event.clientX;
+  }
+}
+
+document.body.addEventListener('mouseup', () => {
+  beadBeingMoved = null;
+});
+
+// タッチ操作モード
+function applyTouchOperation() {
   const beads = document.querySelectorAll('.bead');
   beads.forEach(bead => {
     bead.addEventListener('touchstart', onTouchStart);
@@ -64,7 +109,6 @@ function applySettings() {
 }
 
 let initialY = 0;
-let beadBeingMoved = null;
 
 function onTouchStart(event) {
   beadBeingMoved = event.target;
@@ -75,7 +119,7 @@ function onTouchMove(event) {
   if (beadBeingMoved) {
     const deltaY = event.touches[0].clientY - initialY;
     let newY = parseFloat(beadBeingMoved.style.bottom || 0) + deltaY;
-    newY = Math.min(5.5, Math.max(0, newY));  // limit the movement within the rod
+    newY = Math.min(5.5, Math.max(0, newY));  // 桁内での動きに制限
     beadBeingMoved.style.bottom = `${newY}cm`;
     initialY = event.touches[0].clientY;
   }
