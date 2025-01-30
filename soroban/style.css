@@ -1,98 +1,62 @@
+/* 基本的なスタイル */
 body {
   font-family: Arial, sans-serif;
-  padding: 20px;
-  background-color: #f5f5f5;
+  margin: 0;
+  padding: 0;
+  background-color: #f3f3f3;
 }
 
-.menu-toggle {
+.menu-button {
   font-size: 30px;
-  cursor: pointer;
-  padding: 10px;
   background-color: #333;
   color: white;
   border: none;
-  border-radius: 5px;
-  margin-bottom: 10px;
+  padding: 10px;
+  cursor: pointer;
+  position: absolute;
+  top: 10px;
+  left: 10px;
 }
 
 .settings-panel {
-  position: fixed;
-  top: 0;
-  right: -250px;
-  width: 250px;
-  background-color: #ffffff;
-  height: 100%;
-  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+  display: none;
+  position: absolute;
+  top: 50px;
+  left: 10px;
+  background-color: white;
   padding: 20px;
-  transition: right 0.3s ease;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .settings-panel.show {
-  right: 0;
+  display: block;
 }
 
-.settings label {
-  margin-right: 10px;
+input, select {
+  margin: 10px 0;
 }
 
 #soroban {
+  margin-top: 50px;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: center;
   align-items: center;
-  margin-top: 20px;
-  flex-wrap: nowrap;
-  background-color: #f7f7f7;
-  border: 2px solid #d3d3d3;
-  padding: 20px;
-  border-radius: 8px;
 }
 
-.rod {
-  position: relative;
-  width: 2cm;
-  height: 12cm;
-  background-color: #8B4513;
-  margin: 0 0.5cm;
-  border-radius: 10px;
-}
-
-.bead {
-  position: absolute;
-  background-color: #F0C25C;
+.soroban-bead {
+  width: 40px;
+  height: 40px;
+  background-color: #f39c12;
   border-radius: 50%;
-  transition: top 0.3s, bottom 0.3s;
+  margin: 5px;
+  cursor: pointer;
 }
 
-.top-bead {
-  top: 0;
+.soroban-bead.active {
+  background-color: #e74c3c;
 }
 
-.bottom-bead {
-  bottom: 0;
-}
-
-.separator {
-  position: absolute;
-  width: 100%;
-  height: 2px;
-  background-color: #333;
-  top: 50%;
-}
-
-.separator .dot {
-  position: absolute;
-  width: 6px;
-  height: 6px;
-  background-color: #FF0000;
-  border-radius: 50%;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-#apply-settings {
+#connection-code {
   margin-top: 20px;
-}
-
-#soroban {
-  margin-top: 40px;
 }
