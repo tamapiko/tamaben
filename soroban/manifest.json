@@ -1,20 +1,12 @@
 {
-    "name": "そろばんシミュレーター",
-    "short_name": "そろばん",
-    "icons": [
-        {
-            "src": "icon-192.png",
-            "sizes": "192x192",
-            "type": "image/png"
-        },
-        {
-            "src": "icon-512.png",
-            "sizes": "512x512",
-            "type": "image/png"
-        }
-    ],
-    "start_url": "./index.html",
-    "display": "standalone",
-    "background_color": "#f5f5f5",
-    "theme_color": "#f5f5f5"
+  "name": "そろばん",
+  "icons": [
+    {
+      "src": "icons/512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "orientation": "landscape",
+  "display": "standalone"
 }
