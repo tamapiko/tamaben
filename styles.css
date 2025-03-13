@@ -129,3 +129,70 @@ button {
         margin: 0 5px; /* ボタン間の余白を設定 */
     }
     }
+/* ヘッダー */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+}
+
+/* ロゴ */
+.logo {
+    height: 50px;
+}
+
+/* ヘッダーアイコン */
+.header-icons {
+    display: flex;
+    gap: 15px;
+}
+
+.icon {
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+}
+
+/* カルーセル（スライド部分） */
+.carousel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px;
+}
+
+/* スライドウィンドウ */
+.carousel-window {
+    width: 70%;
+    overflow: hidden;
+    border-radius: 20px;
+}
+
+/* スライドコンテンツ */
+.carousel-content {
+    display: flex;
+    transition: transform 0.3s ease;
+}
+
+/* スライドアイテム */
+.carousel-item {
+    min-width: 100%;
+    height: 200px;
+    background: #A7F0BA;
+    margin: 0 10px;
+    border-radius: 20px;
+}
+
+/* 矢印ボタン */
+.arrow {
+    background: #2F423D;
+    border: none;
+    border-radius: 50%;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.arrow img {
+    width: 20px;
+}
