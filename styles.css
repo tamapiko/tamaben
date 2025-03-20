@@ -26,6 +26,7 @@ body {
     gap: 4vw;
 }
 
+/* 検索アイコンのみ表示 */
 .icon {
     width: 10vw;
     max-width: 50px;
@@ -69,7 +70,7 @@ body {
 .arrow {
     background: none;
     border: none;
-    font-size: 12vw;  /* スマホでも大きく表示 */
+    font-size: 12vw;
     max-font-size: 60px;
     color: #2F423D;
     cursor: pointer;
