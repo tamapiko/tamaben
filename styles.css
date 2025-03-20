@@ -58,7 +58,7 @@ body {
 /* スライドアイテム */
 .carousel-item {
     min-width: 100%;
-    height: 50vw;
+    height: 60vw;
     max-height: 300px;
     background: #A7F0BA;
     border-radius: 20px;
@@ -69,8 +69,8 @@ body {
 .arrow {
     background: none;
     border: none;
-    font-size: 8vw;
-    max-font-size: 40px;
+    font-size: 12vw;  /* スマホでも大きく表示 */
+    max-font-size: 60px;
     color: #2F423D;
     cursor: pointer;
 }
@@ -94,6 +94,6 @@ body {
     }
 
     .arrow {
-        font-size: 40px;
+        font-size: 60px;
     }
 }
