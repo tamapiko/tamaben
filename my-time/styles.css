@@ -10,9 +10,9 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
+    flex-direction: column;
 }
 
-/* 全体のレイアウト */
 h1 {
     text-align: center;
     font-size: 2.5rem;
@@ -20,18 +20,51 @@ h1 {
     margin-bottom: 30px;
 }
 
+/* メニューバー */
+nav {
+    width: 100%;
+    background-color: #ff7f7f;
+    padding: 10px 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+}
+
+nav a {
+    text-decoration: none;
+    color: white;
+    font-size: 1.2rem;
+    margin: 0 20px;
+    transition: color 0.3s;
+}
+
+nav a:hover {
+    color: #ffe4e1;
+}
+
+/* メインコンテンツエリア */
+.main-content {
+    text-align: center;
+    width: 100%;
+    max-width: 800px;
+    margin-top: 80px;
+}
+
 .timer-container {
     background: linear-gradient(145deg, #ffe4e1, #ffb6c1); /* 優しいピンクのグラデーション */
     border-radius: 20px;
     padding: 30px;
-    width: 100%;
-    max-width: 450px;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
     position: relative;
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
-/* 教科セレクトボックス */
 select {
     background-color: #fff;
     padding: 12px 20px;
@@ -49,18 +82,13 @@ select:focus {
     outline: none;
 }
 
-/* タイマーの数字部分 */
 .timer {
     font-size: 4rem;
     font-weight: 700;
     color: #4CAF50;
     margin-bottom: 20px;
-    position: relative;
-    z-index: 1;
-    font-family: 'Noto Sans JP', sans-serif;
 }
 
-/* タイマーの円形部分 */
 .circle-timer {
     position: absolute;
     top: 50%;
@@ -74,7 +102,6 @@ select:focus {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* ボタンのデザイン */
 .button {
     padding: 12px 24px;
     font-size: 1.2rem;
@@ -101,7 +128,6 @@ select:focus {
     cursor: not-allowed;
 }
 
-/* お知らせの表示 */
 .alert {
     color: #ff7f7f;
     font-size: 1.2rem;
@@ -125,14 +151,62 @@ canvas {
     height: auto !important;
 }
 
-/* レスポンシブ対応 */
+/* パソコン用デザイン */
+@media (min-width: 1024px) {
+    .main-content {
+        width: 70%;
+        margin-top: 120px;
+    }
+
+    .timer {
+        font-size: 5rem;
+    }
+
+    .button {
+        width: 50%;
+    }
+
+    nav a {
+        margin: 0 30px;
+    }
+
+    .study-time, #weeklyAverage {
+        width: 60%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+/* スマホ用デザイン */
 @media (max-width: 600px) {
+    .main-content {
+        width: 100%;
+        padding: 10px;
+    }
+
     .timer-container {
-        width: 90%;
+        width: 100%;
         padding: 20px;
     }
 
     .timer {
         font-size: 3rem;
+    }
+
+    .button {
+        width: 90%;
+    }
+
+    nav {
+        flex-direction: column;
+    }
+
+    nav a {
+        margin: 10px 0;
+        font-size: 1rem;
+    }
+
+    .study-time, #weeklyAverage {
+        width: 100%;
     }
 }
