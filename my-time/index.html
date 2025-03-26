@@ -1,1 +1,52 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>マイスタディ ポモドーロタイマー</title>
+    <link rel="manifest" href="manifest.json"> <!-- Manifestファイルをリンク -->
+    <link rel="stylesheet" href="styles.css"> <!-- CSSファイルのリンク -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Chart.js ライブラリ -->
+</head>
+<body>
+    <h1>マイスタディ ポモドーロタイマー</h1>
 
+    <div class="timer-container">
+        <label for="subject">教科を選択：</label>
+        <select id="subject">
+            <option value="国語">国語</option>
+            <option value="数学">数学</option>
+            <option value="理科">理科</option>
+            <option value="社会">社会</option>
+            <option value="英語">英語</option>
+            <option value="保健体育">保健体育</option>
+            <option value="技術">技術</option>
+            <option value="家庭科">家庭科</option>
+            <option value="音楽">音楽</option>
+        </select>
+
+        <!-- 円形タイマー -->
+        <div class="circle-timer"></div>
+
+        <div class="timer" id="timer">25:00</div>
+        <div class="alert" id="alert"></div>
+
+        <button class="button" id="startBtn">スタート</button>
+        <button class="button" id="resetBtn">リセット</button>
+
+        <div class="study-time" id="studyTime">
+            <h3>勉強時間</h3>
+            <p id="studyTimeOutput">各教科の勉強時間がここに表示されます。</p>
+        </div>
+
+        <div class="study-time" id="weeklyAverage">
+            <h3>1週間の平均勉強時間</h3>
+            <p id="averageTimeOutput">計算中...</p>
+        </div>
+
+        <canvas id="myChart"></canvas>
+    </div>
+
+    <script src="script.js"></script> <!-- JavaScriptファイルのリンク -->
+</body>
+</html>
