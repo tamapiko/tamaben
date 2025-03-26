@@ -1,4 +1,4 @@
-// 既存のコードの変更
+// 既存のコードとほぼ同じですが、スタイルを可愛い色に変更
 
 let canvas = document.createElement('canvas');
 let ctx = canvas.getContext('2d');
@@ -15,18 +15,18 @@ function updateCircleTimer() {
 
     ctx.clearRect(0, 0, canvas.width, canvas.height); // 以前の円を消去
 
-    // 背景円（灰色）
+    // 背景円（薄いピンク）
     ctx.beginPath();
     ctx.arc(100, 100, 90, 0, 2 * Math.PI);
     ctx.lineWidth = 10;
-    ctx.strokeStyle = '#e6e6e6';
+    ctx.strokeStyle = '#ffe4e1';  // 優しいピンク
     ctx.stroke();
 
-    // 進行状況の円（緑色）
+    // 進行状況の円（明るいピンク）
     ctx.beginPath();
     ctx.arc(100, 100, 90, startAngle, endAngle);
     ctx.lineWidth = 10;
-    ctx.strokeStyle = '#4CAF50';
+    ctx.strokeStyle = '#ff7f7f';  // 明るいピンク
     ctx.lineCap = 'round';  // 円の端を丸く
     ctx.stroke();
 }
