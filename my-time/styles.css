@@ -1,74 +1,138 @@
-/* 既存のスタイルはそのまま */
+/* Google Fontsから丸ゴシックフォントを追加 */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap');
 
-.timer-container {
-    background: linear-gradient(145deg, #ffffff, #f0f2f5);
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    padding: 40px;
-    width: 100%;
-    max-width: 450px;
-    margin: 0 auto;
-    box-sizing: border-box;
-    position: relative; /* 円グラフを配置するために親要素にrelative */
+body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
-/* タイマーの円 */
+/* 全体のレイアウト */
+h1 {
+    text-align: center;
+    font-size: 2.5rem;
+    color: #4CAF50;
+    margin-bottom: 30px;
+}
+
+.timer-container {
+    background: linear-gradient(145deg, #ffe4e1, #ffb6c1); /* 優しいピンクのグラデーション */
+    border-radius: 20px;
+    padding: 30px;
+    width: 100%;
+    max-width: 450px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    position: relative;
+    text-align: center;
+}
+
+/* 教科セレクトボックス */
+select {
+    background-color: #fff;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+    width: 100%;
+    border: 1px solid #ffb6c1;
+    box-sizing: border-box;
+    transition: 0.3s ease;
+}
+
+select:focus {
+    border-color: #ff7f7f;
+    outline: none;
+}
+
+/* タイマーの数字部分 */
+.timer {
+    font-size: 4rem;
+    font-weight: 700;
+    color: #4CAF50;
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 1;
+    font-family: 'Noto Sans JP', sans-serif;
+}
+
+/* タイマーの円形部分 */
 .circle-timer {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 200px;
-    height: 200px;
+    width: 180px;
+    height: 180px;
     border-radius: 50%;
-    border: 10px solid #4CAF50; /* 円の縁を太く */
     background: #f0f2f5;
+    border: 10px solid #ffb6c1;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* タイマーの数値 */
-.timer {
-    font-size: 3rem;
-    font-weight: bold;
-    color: #4CAF50;
-    margin-bottom: 20px;
-    position: relative;
-    z-index: 1;
-}
-
-/* セレクトボックスとボタン */
-select, .button {
-    padding: 12px 20px;
-    font-size: 1rem;
-    margin: 10px;
-    border: none;
-    border-radius: 8px;
+/* ボタンのデザイン */
+.button {
+    padding: 12px 24px;
+    font-size: 1.2rem;
+    margin: 15px;
+    border-radius: 10px;
     cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-select {
-    background-color: #f0f2f5;
-    border: 1px solid #ccc;
+    border: none;
+    transition: background-color 0.3s ease;
     width: 100%;
-}
-
-select:focus {
-    border-color: #4CAF50;
-    outline: none;
+    font-family: 'Noto Sans JP', sans-serif;
 }
 
 .button {
-    background-color: #4CAF50;
+    background-color: #ff7f7f;
     color: white;
-    font-weight: bold;
-    transition: background-color 0.3s ease;
+}
+
+.button:hover {
+    background-color: #ff4f4f;
 }
 
 .button:disabled {
-    background-color: #d1d1d1;
+    background-color: #e6e6e6;
     cursor: not-allowed;
 }
 
-.button:hover:not(:disabled) {
-    background-color: #45a049;
+/* お知らせの表示 */
+.alert {
+    color: #ff7f7f;
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+/* 勉強時間の表示エリア */
+.study-time, #weeklyAverage {
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 15px;
+    margin-top: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: left;
+}
+
+/* 円グラフ部分 */
+canvas {
+    width: 100% !important;
+    height: auto !important;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 600px) {
+    .timer-container {
+        width: 90%;
+        padding: 20px;
+    }
+
+    .timer {
+        font-size: 3rem;
+    }
 }
