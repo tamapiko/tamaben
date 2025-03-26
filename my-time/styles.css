@@ -1,0 +1,74 @@
+/* 既存のスタイルはそのまま */
+
+.timer-container {
+    background: linear-gradient(145deg, #ffffff, #f0f2f5);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    width: 100%;
+    max-width: 450px;
+    margin: 0 auto;
+    box-sizing: border-box;
+    position: relative; /* 円グラフを配置するために親要素にrelative */
+}
+
+/* タイマーの円 */
+.circle-timer {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    border: 10px solid #4CAF50; /* 円の縁を太く */
+    background: #f0f2f5;
+}
+
+/* タイマーの数値 */
+.timer {
+    font-size: 3rem;
+    font-weight: bold;
+    color: #4CAF50;
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 1;
+}
+
+/* セレクトボックスとボタン */
+select, .button {
+    padding: 12px 20px;
+    font-size: 1rem;
+    margin: 10px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+select {
+    background-color: #f0f2f5;
+    border: 1px solid #ccc;
+    width: 100%;
+}
+
+select:focus {
+    border-color: #4CAF50;
+    outline: none;
+}
+
+.button {
+    background-color: #4CAF50;
+    color: white;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.button:disabled {
+    background-color: #d1d1d1;
+    cursor: not-allowed;
+}
+
+.button:hover:not(:disabled) {
+    background-color: #45a049;
+}
