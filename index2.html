@@ -1,21 +1,30 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
+    <!-- フォント設定 -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Zen+Maru+Gothic&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Zen+Maru+Gothic&display=swap" rel="stylesheet">
+    
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>タマベンサイト</title>
     <link rel="stylesheet" href="/tamaben/styles.css">
 </head>
 <body>
+    <!-- ヘッダー -->
     <header class="header">
-        <img src="logo.svg" alt="タマベン ロゴ" class="logo">
+        <div class="header-logo">
+            <img src="logo.svg" alt="タマベン ロゴ" class="logo">
+            <h1 class="site-title">タマベン</h1>
+        </div>
         <div class="header-icons">
             <img src="search.svg" alt="検索" class="icon">
+            <img src="menu.svg" alt="メニュー" class="icon">
         </div>
     </header>
+
+    <!-- カルーセル -->
     <main class="carousel">
         <button class="arrow left">
             <img src="left.svg" alt="左">
@@ -28,9 +37,10 @@
             </div>
         </div>
         <button class="arrow right">
-            <img src="rig.svg" alt="右">
+            <img src="right.svg" alt="右">
         </button>
     </main>
+
+    <script src="/tamaben/main.js"></script>
 </body>
-    <script src="main.js"></script>
 </html>
