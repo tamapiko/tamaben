@@ -1,93 +1,87 @@
-// 既存のコードとほぼ同じですが、スタイルを可愛い色に変更
+let minutes = 25;  // 勉強時間（ポモドーロタイマー）
+let seconds = 0;
+let timerInterval;
+let isRunning = false;
+let studyTimes = {}; // 教科ごとの勉強時間を格納するオブジェクト
+let weeklyStudyTimes = []; // 1週間の勉強時間を格納
 
-let canvas = document.createElement('canvas');
-let ctx = canvas.getContext('2d');
-document.querySelector('.circle-timer').appendChild(canvas);
-canvas.width = 200;
-canvas.height = 200;
+// タイマー開始/停止
+document.getElementById('startBtn').addEventListener('click', () => {
+    if (isRunning) {
+        clearInterval(timerInterval);
+        isRunning = false;
+        document.getElementById('startBtn').textContent = 'スタート';
+    } else {
+        timerInterval = setInterval(startTimer, 1000);
+        isRunning = true;
+        document.getElementById('startBtn').textContent = '一時停止';
+    }
+});
 
-// 円形タイマーの更新関数
-function updateCircleTimer() {
-    const totalTime = isStudyTime ? studyTime : breakTime;
-    const progress = (totalTime * 60 - (minutes * 60 + seconds)) / (totalTime * 60);  // 進行状況の計算
-    const startAngle = -Math.PI / 2; // 円のスタート角度（上から）
-    const endAngle = startAngle + (progress * 2 * Math.PI);
+// タイマーリセット
+document.getElementById('resetBtn').addEventListener('click', () => {
+    clearInterval(timerInterval);
+    isRunning = false;
+    minutes = 25;
+    seconds = 0;
+    document.getElementById('startBtn').textContent = 'スタート';
+    updateTimerDisplay();
+});
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height); // 以前の円を消去
-
-    // 背景円（薄いピンク）
-    ctx.beginPath();
-    ctx.arc(100, 100, 90, 0, 2 * Math.PI);
-    ctx.lineWidth = 10;
-    ctx.strokeStyle = '#ffe4e1';  // 優しいピンク
-    ctx.stroke();
-
-    // 進行状況の円（明るいピンク）
-    ctx.beginPath();
-    ctx.arc(100, 100, 90, startAngle, endAngle);
-    ctx.lineWidth = 10;
-    ctx.strokeStyle = '#ff7f7f';  // 明るいピンク
-    ctx.lineCap = 'round';  // 円の端を丸く
-    ctx.stroke();
-}
-
-// タイマーを開始する際に円タイマーを更新
+// タイマー更新
 function startTimer() {
-    if (isRunning) return;  // すでにタイマーが動いている場合は何もしない
-
-    isRunning = true;
-    const subject = document.getElementById('subject').value;
-
-    timerInterval = setInterval(function() {
-        if (seconds === 0) {
-            if (minutes === 0) {
-                clearInterval(timerInterval);  // タイマーが0になったら停止
-                const alertSound = new Audio('https://www.soundjay.com/button/beep-07.wav');
-                alertSound.play();
-                alert(isStudyTime ? '勉強時間が終了しました！ 休憩しましょう！' : '休憩時間が終了しました！ 勉強を再開しましょう！');
-
-                // 勉強時間が終了したときにその教科の勉強時間を保存
-                if (isStudyTime) {
-                    studyTimeData[subject] = (studyTimeData[subject] || 0) + studyTime;
-                    dailyStudyData[subject] = (dailyStudyData[subject] || 0) + studyTime;
-                    localStorage.setItem('studyTimeData', JSON.stringify(studyTimeData));
-                    localStorage.setItem('dailyStudyData', JSON.stringify(dailyStudyData));
-                }
-
-                // 日付の更新
-                const currentDate = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
-                dailyStudyData[currentDate] = dailyStudyData[currentDate] || {};
-                dailyStudyData[currentDate][subject] = (dailyStudyData[currentDate][subject] || 0) + studyTime;
-
-                // 円グラフの更新
-                createChart();
-
-                // 勉強時間の表示更新
-                updateStudyTimeDisplay();
-                updateWeeklyAverage();
-                minutes = breakTime;
-                isStudyTime = !isStudyTime;
-                updateTimerDisplay();
-                return;
-            }
+    if (seconds === 0) {
+        if (minutes === 0) {
+            clearInterval(timerInterval);
+            alert("タイマーが終了しました!");
+            // ここで勉強時間を記録
+            updateStudyTime();
+            resetTimer();
+        } else {
             minutes--;
             seconds = 59;
-        } else {
-            seconds--;
         }
-
-        // 円形タイマーの進行を更新
-        updateCircleTimer();
-
-        updateTimerDisplay();
-    }, 1000);
+    } else {
+        seconds--;
+    }
+    updateTimerDisplay();
 }
 
-// タイマーの表示更新
+// タイマー表示更新
 function updateTimerDisplay() {
-    const timerElement = document.getElementById('timer');
-    timerElement.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    const timeString = `${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    document.getElementById('timer').textContent = timeString;
 }
 
-// 最初に円グラフを描画
-updateCircleTimer();
+// 勉強時間を記録
+function updateStudyTime() {
+    const subject = document.getElementById('subject').value;
+    const timeSpent = 25 - minutes + (60 - seconds) / 60; // 分単位の時間計算
+
+    if (!studyTimes[subject]) {
+        studyTimes[subject] = 0;
+    }
+    studyTimes[subject] += timeSpent;
+
+    weeklyStudyTimes.push(timeSpent);
+
+    localStorage.setItem('studyTimes', JSON.stringify(studyTimes));
+
+    // 勉強時間表示
+    let studyTimeText = '';
+    for (let subject in studyTimes) {
+        studyTimeText += `${subject}: ${studyTimes[subject].toFixed(2)} 分<br>`;
+    }
+    document.getElementById('studyTimeOutput').innerHTML = studyTimeText;
+
+    // 1週間の平均勉強時間表示
+    const averageTime = weeklyStudyTimes.reduce((acc, time) => acc + time, 0) / weeklyStudyTimes.length;
+    document.getElementById('averageTimeOutput').textContent = averageTime.toFixed(2) + ' 分';
+}
+
+// リセットタイマー
+function resetTimer() {
+    minutes = 25;
+    seconds = 0;
+    updateTimerDisplay();
+}
