@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>マイスタディ ポモドーロタイマー</title>
+    <link rel="manifest" href="manifest.json"> <!-- Manifestファイルをリンク -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Chart.js ライブラリ -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f0f0f0;
+            text-align: center;
+        }
+
+        .timer-container {
+            margin-bottom: 20px;
+        }
+
+        .timer {
+            font-size: 3em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        select, .button {
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            margin: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .button {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .button:disabled {
+            background-color: #ccc;
+        }
+
+        .alert {
+            color: red;
+            margin-top: 20px;
+        }
+
+        .study-time {
+            margin-top: 30px;
+            font-size: 1.1em;
+        }
+
+        #myChart {
+            width: 300px;
+            height: 300px;
+            margin-top: 20px;
+        }
+
+    </style>
+</head>
+<body>
+    <h1>マイスタディ ポモドーロタイマー</h1>
+
+    <div class="timer-container">
+        <label for="subject">教科を選択：</label>
+        <select id="subject">
+            <option value="国語">国語</option>
+            <option value="数学">数学</option>
+            <option value="理科">理科</option>
+            <option value="社会">社会</option>
+            <option value="英語">英語</option>
+            <option value="保健体育">保健体育</option>
+            <option value="技術">技術</option>
+            <option value="家庭科">家庭科</option>
+            <option value="音楽">音楽</option>
+        </select>
+
+        <div class="timer" id="timer">25:00</div>
+        <div class="alert" id="alert"></div>
+
+        <button class="button" id="startBtn">スタート</button>
+        <button class="button" id="resetBtn">リセット</button>
+
+        <div class="study-time" id="studyTime">
+            <h3>勉強時間</h3>
+            <p id="studyTimeOutput">各教科の勉強時間がここに表示されます。</p>
+        </div>
+
+        <div class="study-time" id="weeklyAverage">
+            <h3>1週間の平均勉強時間</h3>
+            <p id="averageTimeOutput">計算中...</p>
+        </div>
+
+        <!-- 円グラフ用キャンバス -->
+        <canvas id="myChart"></canvas>
+    </div>
+
+    <script>
+        // 初期設定
+        let studyTime = 25;  // 勉強時間 (25分)
+        let breakTime = 5;   // 休憩時間 (5分)
+        let minutes = studyTime;
+        let seconds = 0;
+        let isRunning = false;
+        let isStudyTime = true;  // 勉強時間か休憩時間かのフラグ
+        let timerInterval;
+        let studyTimeData = JSON.parse(localStorage.getItem('studyTimeData')) || {};
+        let dailyStudyData = JSON.parse(localStorage.getItem('dailyStudyData')) || {};
+
+        // 勉強時間の表示更新
+        function updateStudyTimeDisplay() {
+            const studyTimeOutput = document.getElementById('studyTimeOutput');
+            let outputText = '';
+            for (const subject in studyTimeData) {
+                outputText += `${subject}: ${studyTimeData[subject]}分<br>`;
+            }
+            studyTimeOutput.innerHTML = outputText || '勉強時間はまだ記録されていません。';
+        }
+
+        // 1週間の平均勉強時間表示
+        function updateWeeklyAverage() {
+            const averageTimeOutput = document.getElementById('averageTimeOutput');
+            let totalTime = 0;
+            let count = 0;
+
+            // 日ごとの勉強時間合計を計算
+            for (const day in dailyStudyData) {
+                totalTime += dailyStudyData[day];
+                count++;
+            }
+
+            const average = count ? totalTime / count : 0;
+            averageTimeOutput.textContent = `1週間の平均勉強時間: ${average.toFixed(2)} 分`;
+        }
+
+        // 円グラフ用データを作成
+        function createChart() {
+            const ctx = document.getElementById('myChart').getContext('2d');
+            const dailyStudy = dailyStudyData[Object.keys(dailyStudyData).pop()] || {}; // 今日の勉強時間
+
+            const chartData = {
+                labels: Object.keys(dailyStudy),
+                datasets: [{
+                    data: Object.values(dailyStudy),
+                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#8B0000', '#808080', '#DAA520'],
+                    hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#8B0000', '#808080', '#DAA520'],
+                }]
+            };
+
+            new Chart(ctx, {
+                type: 'pie',
+                data: chartData,
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(tooltipItem) {
+                                    return `${tooltipItem.label}: ${tooltipItem.raw}分`;
+                                }
+                            }
+                        }
+                    }
+                });
+        }
+
+        // タイマーの表示更新
+        function updateTimerDisplay() {
+            const timerElement = document.getElementById('timer');
+            timerElement.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
+
+        // タイマーを開始
+        function startTimer() {
+            if (isRunning) return;  // すでにタイマーが動いている場合は何もしない
+
+            isRunning = true;
+            const subject = document.getElementById('subject').value;
+
+            timerInterval = setInterval(function() {
+                if (seconds === 0) {
+                    if (minutes === 0) {
+                        clearInterval(timerInterval);  // タイマーが0になったら停止
+                        const alertSound = new Audio('https://www.soundjay.com/button/beep-07.wav');
+                        alertSound.play();
+                        alert(isStudyTime ? '勉強時間が終了しました！ 休憩しましょう！' : '休憩時間が終了しました！ 勉強を再開しましょう！');
+
+                        // 勉強時間が終了したときにその教科の勉強時間を保存
+                        if (isStudyTime) {
+                            studyTimeData[subject] = (studyTimeData[subject] || 0) + studyTime;
+                            dailyStudyData[subject] = (dailyStudyData[subject] || 0) + studyTime;
+                            localStorage.setItem('studyTimeData', JSON.stringify(studyTimeData));
+                            localStorage.setItem('dailyStudyData', JSON.stringify(dailyStudyData));
+                        }
+
+                        // 日付の更新
+                        const currentDate = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+                        dailyStudyData[currentDate] = dailyStudyData[currentDate] || {};
+                        dailyStudyData[currentDate][subject] = (dailyStudyData[currentDate][subject] || 0) + studyTime;
+                        localStorage.setItem('dailyStudyData', JSON.stringify(dailyStudyData));
+
+                        isStudyTime = !isStudyTime;  // 勉強と休憩を切り替え
+                        minutes = isStudyTime ? studyTime : breakTime;
+                        seconds = 0;
+                        updateTimerDisplay();
+                        updateStudyTimeDisplay();
+                        updateWeeklyAverage(); // 1週間の平均時間更新
+                        createChart(); // 円グラフの更新
+                        isRunning = false;
+                        return;
+                    }
+                    minutes--;
+                    seconds = 59;
+                } else {
+                    seconds--;
+                }
+                updateTimerDisplay();
+            }, 1000);
+        }
+
+        // タイマーをリセット
+        function resetTimer() {
+            clearInterval(timerInterval);
+            minutes = studyTime;
+            seconds = 0;
+            updateTimerDisplay();
+            isRunning = false;
+            isStudyTime = true;  // 勉強時間にリセット
+        }
+
+        // ボタンのイベントリスナー
+        document.getElementById('startBtn').addEventListener('click', startTimer);
+        document.getElementById('resetBtn').addEventListener('click', resetTimer);
+
+        // 初期表示の更新
+        updateStudyTimeDisplay();
+        updateWeeklyAverage();
+        createChart();
+
+        // サービスワーカーの登録
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/service-worker.js')
+                .then(function(registration) {
+                    console.log('Service Worker registered with scope: ', registration.scope);
+                })
+                .catch(function(error) {
+                    console.log('Service Worker registration failed: ', error);
+                });
+        }
+    </script>
+</body>
+</html>
