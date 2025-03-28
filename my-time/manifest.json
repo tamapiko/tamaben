@@ -2,10 +2,11 @@
   "name": "スタディーム ポモドーロタイマー",
   "short_name": "スタディーム",
   "description": "効率良い勉強のためのポモドーロタイマーアプリ",
-  "start_url": "./",
-  "display": "standalone",
-  "background_color": "#D0E2FF",
-  "theme_color": "#D0E2FF",
+  "start_url": "./index.html",
+    "display": "standalone",
+    "theme_color": "#182246",
+    "background_color": "#182246",
+    "orientation": "any",
   "icons": [
     {
       "src": "icons/icon-192x192.png",
