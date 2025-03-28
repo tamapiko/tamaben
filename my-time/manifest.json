@@ -1,11 +1,11 @@
 {
-  "name": "マイスタディ ポモドーロタイマー",
-  "short_name": "マイスタディ",
+  "name": "スタディーム ポモドーロタイマー",
+  "short_name": "スタディーム",
   "description": "効率良い勉強のためのポモドーロタイマーアプリ",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#f0f0f0",
-  "theme_color": "#4CAF50",
+  "background_color": "#D0E2FF",
+  "theme_color": "#D0E2FF",
   "icons": [
     {
       "src": "icons/icon-192x192.png",
