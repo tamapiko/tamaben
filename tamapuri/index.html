@@ -3,203 +3,129 @@
 <head>
   <meta charset="UTF-8">
   <title>タマプリツール</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    body { font-family: sans-serif; margin: 20px; }
-    select, input, textarea, button {
-      margin: 8px 0; display: block;
-      width: 100%; max-width: 500px;
-    }
+    body { font-family: 'Arial', sans-serif; margin: 0; padding: 0; background: #f9f9f9; }
+    h1 { text-align: center; background: #3f51b5; color: white; padding: 10px 0; margin: 0; }
+    .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+
     .print-area {
-      border: 1px solid #aaa;
-      padding: 20px;
-      background: white;
-      margin: 20px auto;
-      width: 100%; max-width: 800px;
+      background: white; border: 1px solid #ccc; border-radius: 6px;
+      padding: 20px; min-height: 800px; margin-bottom: 100px;
     }
-    .daimon {
-      margin-bottom: 30px;
-      border-top: 2px solid #444;
-      padding-top: 10px;
+
+    .button-bar {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      display: flex; justify-content: space-around; align-items: center;
+      background: #333; padding: 10px; z-index: 999;
     }
-    .shomon {
-      margin-left: 20px;
-      margin-bottom: 20px;
+
+    .button-bar button {
+      background: #4CAF50; color: white; border: none;
+      padding: 10px 15px; border-radius: 5px; font-size: 14px;
     }
+
+    .question { margin-top: 20px; }
     .answer-box {
-      border: 1px solid #000;
-      height: 80px;
-      margin-top: 10px;
-      padding: 5px;
+      border: 2px solid #000; margin: 10px 0; height: 40px;
     }
-    .answer-box input {
-      width: 100%;
-      height: 100%;
-      border: none;
-      text-align: center;
-      font-size: 14px;
+
+    img.shape {
+      width: 100px; height: auto; margin: 10px;
     }
-    img {
-      max-width: 100%;
-      margin-top: 10px;
-    }
-    .style-options, .size-options {
-      margin-top: 20px;
-    }
-    @media print {
-      body * { visibility: hidden; }
-      .print-area, .print-area * { visibility: visible; }
-      .print-area {
-        position: absolute;
-        top: 0; left: 0;
-        width: 100%;
-      }
-      button { display: none !important; }
+
+    select, input[type="number"] {
+      padding: 5px; margin: 5px;
     }
   </style>
 </head>
 <body>
 
-<h2>タマプリツール</h2>
+<h1>タマプリツール</h1>
 
-<label>テンプレートを選択:</label>
-<select id="templateSelect">
-  <option value="default">標準テンプレート</option>
-  <option value="tenp">tenp.pdf（カスタムテンプレート）</option>
-</select>
+<div class="container">
+  <label>プリントサイズ:
+    <select id="sizeSelector" onchange="changePrintSize()">
+      <option value="A4">A4</option>
+      <option value="A3">A3</option>
+      <option value="A5">A5</option>
+    </select>
+  </label>
 
-<label>プリントサイズを選択:</label>
-<select id="printSizeSelect">
-  <option value="A4">A4</option>
-  <option value="A3">A3</option>
-  <option value="A5">A5</option>
-</select>
-
-<button onclick="addDaimon()">大問を追加</button>
-<button onclick="window.print()">印刷</button>
-
-<div class="style-options">
-  <label>解答欄の枠線太さ:</label>
-  <select id="borderThickness">
-    <option value="1px">1px</option>
-    <option value="2px">2px</option>
-    <option value="3px">3px</option>
-  </select>
-
-  <label>解答欄の枠線スタイル:</label>
-  <select id="borderStyle">
-    <option value="solid">実線</option>
-    <option value="dashed">点線</option>
-    <option value="dotted">破線</option>
-  </select>
+  <div class="print-area" id="printArea"></div>
 </div>
 
-<div class="print-area" id="printArea">
-  <h1>タマプリツール</h1>
+<!-- ボタンバー（スマホ対応） -->
+<div class="button-bar">
+  <button onclick="addDaimon()">大問追加</button>
+  <button onclick="addShomon()">小問追加</button>
+  <button onclick="addAnswerBox()">解答欄</button>
+  <button onclick="addShape('cube')">立体</button>
+  <button onclick="addShape('circle')">円</button>
+  <button onclick="addShape('triangle')">三角</button>
+  <button onclick="saveAsPdf()">PDF</button>
 </div>
+
+<!-- jsPDF ライブラリ -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <script>
   let daimonCount = 0;
+  let shomonCount = 0;
 
-  // プリントサイズ変更
-  document.getElementById("printSizeSelect").addEventListener("change", function() {
-    updatePrintSize(this.value);
-  });
-
-  // プリントサイズを更新
-  function updatePrintSize(size) {
-    const printArea = document.getElementById("printArea");
-
-    if (size === "A4") {
-      printArea.style.width = "800px";
-      printArea.style.height = "1120px";
-    } else if (size === "A3") {
-      printArea.style.width = "1120px";
-      printArea.style.height = "1580px";
-    } else if (size === "A5") {
-      printArea.style.width = "600px";
-      printArea.style.height = "850px";
-    }
-  }
-
-  // 大問追加
   function addDaimon() {
     daimonCount++;
-    const daimon = document.createElement("div");
-    daimon.className = "daimon";
-    daimon.dataset.shomonCount = 0;
-
-    const title = document.createElement("h2");
-    title.textContent = `【${daimonCount}】`;
-    daimon.appendChild(title);
-
-    const btn = document.createElement("button");
-    btn.textContent = "小問を追加";
-    btn.onclick = () => addShomon(daimon);
-    daimon.appendChild(btn);
-
-    document.getElementById("printArea").appendChild(daimon);
+    shomonCount = 0;
+    const div = document.createElement("div");
+    div.className = "question";
+    div.innerHTML = `<h2>【${daimonCount}】</h2>`;
+    document.getElementById("printArea").appendChild(div);
   }
 
-  // 小問追加
-  function addShomon(daimonElem) {
-    let count = Number(daimonElem.dataset.shomonCount) + 1;
-    daimonElem.dataset.shomonCount = count;
-
-    const shomon = document.createElement("div");
-    shomon.className = "shomon";
-
-    const label = document.createElement("strong");
-    label.textContent = `（${count}）`;
-    shomon.appendChild(label);
-
-    const text = prompt("小問の内容を入力してください:");
-    if (text) {
-      const p = document.createElement("p");
-      p.textContent = text;
-      shomon.appendChild(p);
-    }
-
-    const answerBox = document.createElement("div");
-    answerBox.className = "answer-box";
-    answerBox.style.borderWidth = document.getElementById("borderThickness").value;
-    answerBox.style.borderStyle = document.getElementById("borderStyle").value;
-    shomon.appendChild(answerBox);
-
-    const addImage = confirm("図形を追加しますか？");
-    if (addImage) {
-      const url = prompt("図形の画像URLを入力してください:");
-      if (url) {
-        const img = document.createElement("img");
-        img.src = url;
-        shomon.appendChild(img);
-      }
-    }
-
-    daimonElem.appendChild(shomon);
+  function addShomon() {
+    if (daimonCount === 0) addDaimon();
+    shomonCount++;
+    const div = document.createElement("div");
+    div.innerHTML = `<p>（${shomonCount}）ここに問題文を入力</p>`;
+    document.getElementById("printArea").appendChild(div);
   }
 
-  // テンプレート選択
-  document.getElementById("templateSelect").addEventListener("change", function() {
-    if (this.value === "tenp") {
-      loadTemplatePDF();
-    } else {
-      alert("選択したテンプレートは利用できません。");
-    }
-  });
-
-  // PDFテンプレートの読み込み
-  function loadTemplatePDF() {
-    const templateContainer = document.createElement('div');
-    templateContainer.id = "pdfContainer";
-    const templateContent = document.createElement('iframe');
-    templateContent.src = "tenp.pdf"; // ここでテンプレートPDFを指定
-    templateContent.width = "100%";
-    templateContent.height = "500px";
-    templateContainer.appendChild(templateContent);
-
-    document.getElementById("printArea").appendChild(templateContainer);
+  function addAnswerBox() {
+    const div = document.createElement("div");
+    div.className = "answer-box";
+    document.getElementById("printArea").appendChild(div);
   }
 
+  function addShape(type) {
+    const img = document.createElement("img");
+    img.className = "shape";
+    if (type === 'cube') img.src = '/mnt/data/tamapuri_images/cube.png';
+    if (type === 'circle') img.src = '/mnt/data/tamapuri_images/circle.png';
+    if (type === 'triangle') img.src = '/mnt/data/tamapuri_images/triangle.png';
+    document.getElementById("printArea").appendChild(img);
+  }
+
+  function changePrintSize() {
+    const area = document.getElementById("printArea");
+    const size = document.getElementById("sizeSelector").value;
+    switch(size) {
+      case 'A3': area.style.minHeight = "1150px"; break;
+      case 'A5': area.style.minHeight = "600px"; break;
+      default: area.style.minHeight = "800px";
+    }
+  }
+
+  function saveAsPdf() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF("p", "pt", "a4");
+    doc.html(document.getElementById("printArea"), {
+      callback: function (doc) {
+        doc.save("tama_print.pdf");
+      },
+      x: 10,
+      y: 10
+    });
+  }
 </script>
 
 </body>
