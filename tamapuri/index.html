@@ -4,106 +4,13 @@
   <meta charset="UTF-8">
   <title>タマプリツール</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body { font-family: 'Arial', sans-serif; margin: 0; padding: 0; background: #f0f0f0; }
-    h1 { text-align: center; background: #3f51b5; color: white; padding: 10px 0; margin: 0; }
-
-    .layout {
-      display: flex;
-      flex-direction: row;
-      height: calc(100vh - 50px);
-    }
-
-    .sidebar {
-      width: 20%;
-      background-color: #eee;
-      padding: 10px;
-      box-sizing: border-box;
-    }
-
-    .editor {
-      width: 80%;
-      padding: 10px;
-      box-sizing: border-box;
-      overflow: auto;
-    }
-
-    .print-area {
-      background: white; border: 1px solid #ccc; border-radius: 6px;
-      padding: 20px; min-height: 800px; margin-bottom: 100px;
-      position: relative;
-    }
-
-    .button-bar {
-      position: fixed; bottom: 0; left: 0; right: 0;
-      display: flex; justify-content: space-around; align-items: center;
-      background: #333; padding: 10px; z-index: 999;
-    }
-
-    .button-bar button {
-      background: #4CAF50; color: white; border: none;
-      padding: 10px 15px; border-radius: 5px; font-size: 14px;
-    }
-
-    .editable {
-      display: inline-block;
-      padding: 5px;
-      border: 1px dashed transparent;
-      min-width: 50px;
-    }
-
-    .editable:hover {
-      border: 1px dashed #aaa;
-    }
-
-    .resize {
-      resize: both;
-      overflow: auto;
-      display: inline-block;
-    }
-
-    .logo-button {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      background: none;
-      border: none;
-      cursor: pointer;
-    }
-
-    .logo-button img {
-      width: 80px;
-    }
-
-    .logo-text {
-      display: none;
-      font-size: 14px;
-      color: #333;
-    }
-
-    @media (max-width: 768px) {
-      .layout {
-        flex-direction: column;
-      }
-      .sidebar {
-        width: 100%;
-        height: auto;
-      }
-      .editor {
-        width: 100%;
-        height: auto;
-      }
-      .logo-text {
-        display: block;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
 <h1>
   <button class="logo-button">
-    <img src="logo.png" alt="タマプリロゴ">
+    <img src="logo.svg" alt="ロゴ" class="logo-image">
     <span class="logo-text">タマプリツール</span>
   </button>
 </h1>
@@ -112,21 +19,21 @@
   <div class="sidebar">
     <h3>アップロード</h3>
     <input type="file" accept=".pdf, image/*"><br><br>
-    <h3>テンプレート</h3>
-    <button onclick="loadTemplate('A4')">A4テンプレート</button>
-    <button onclick="loadTemplate('A3')">A3テンプレート</button>
-    <button onclick="loadTemplate('Grid')">方眼テンプレート</button><br><br>
 
-    <label>プリントサイズ:
-      <select id="sizeSelector" onchange="changePrintSize()">
-        <option value="A4">A4</option>
-        <option value="A3">A3</option>
-        <option value="A5">A5</option>
-      </select>
-    </label>
-    <br><br>
-    <button onclick="saveToCookie()">保存</button>
-    <button onclick="loadFromCookie()">読み込み</button>
+    <h3>テンプレート</h3>
+    <button onclick="loadTemplate()">タマベンテンプレート</button><br><br>
+
+    <h3>プリントサイズ</h3>
+    <select id="sizeSelector" onchange="changePrintSize()">
+      <option value="A4">A4</option>
+      <option value="A3">A3</option>
+      <option value="A5">A5</option>
+    </select>
+
+    <div class="print-preview">
+      <h3>作成プリント</h3>
+      <img src="tenp.pdf" alt="プリントテンプレートプレビュー">
+    </div>
   </div>
   <div class="editor">
     <div class="print-area" id="printArea"></div>
@@ -135,7 +42,9 @@
 
 <!-- ボタンバー -->
 <div class="button-bar">
-  <button onclick="addTextBox()">テキスト</button>
+  <button onclick="addTextBox()">
+    <img src="logo.svg" alt="ロゴ" width="20"> テキスト
+  </button>
   <button onclick="addAnswerBox()">解答欄</button>
   <button onclick="saveAsPdf()">PDF</button>
 </div>
@@ -187,26 +96,17 @@
     });
   }
 
-  function loadTemplate(template) {
+  function loadTemplate() {
     const area = document.getElementById("printArea");
-    area.innerHTML += `<div style="border:1px dashed #888; padding:10px; margin:10px 0;">${template}テンプレート挿入</div>`;
-  }
-
-  function saveToCookie() {
-    const content = document.getElementById("printArea").innerHTML;
-    document.cookie = "savedPrint=" + encodeURIComponent(content) + "; path=/; max-age=31536000"; // 1年
-    alert("保存しました。");
-  }
-
-  function loadFromCookie() {
-    const cookies = document.cookie.split('; ');
-    const saved = cookies.find(c => c.startsWith('savedPrint='));
-    if (saved) {
-      document.getElementById("printArea").innerHTML = decodeURIComponent(saved.split('=')[1]);
-      alert("読み込みました。");
-    } else {
-      alert("保存データが見つかりません。");
-    }
+    area.innerHTML = '';
+    const embed = document.createElement("embed");
+    embed.src = "tenp.pdf";
+    embed.type = "application/pdf";
+    embed.width = "100%";
+    embed.height = "1000px";
+    embed.style.border = "1px solid #ccc";
+    embed.style.borderRadius = "8px";
+    area.appendChild(embed);
   }
 </script>
 
