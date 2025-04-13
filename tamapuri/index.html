@@ -5,13 +5,33 @@
   <title>タマプリツール</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    body { font-family: 'Arial', sans-serif; margin: 0; padding: 0; background: #f9f9f9; }
+    body { font-family: 'Arial', sans-serif; margin: 0; padding: 0; background: #f0f0f0; }
     h1 { text-align: center; background: #3f51b5; color: white; padding: 10px 0; margin: 0; }
-    .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+
+    .layout {
+      display: flex;
+      flex-direction: row;
+      height: calc(100vh - 50px);
+    }
+
+    .sidebar {
+      width: 20%;
+      background-color: #eee;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+
+    .editor {
+      width: 80%;
+      padding: 10px;
+      box-sizing: border-box;
+      overflow: auto;
+    }
 
     .print-area {
       background: white; border: 1px solid #ccc; border-radius: 6px;
       padding: 20px; min-height: 800px; margin-bottom: 100px;
+      position: relative;
     }
 
     .button-bar {
@@ -25,84 +45,124 @@
       padding: 10px 15px; border-radius: 5px; font-size: 14px;
     }
 
-    .question { margin-top: 20px; }
-    .answer-box {
-      border: 2px solid #000; margin: 10px 0; height: 40px;
+    .editable {
+      display: inline-block;
+      padding: 5px;
+      border: 1px dashed transparent;
+      min-width: 50px;
     }
 
-    img.shape {
-      width: 100px; height: auto; margin: 10px;
+    .editable:hover {
+      border: 1px dashed #aaa;
     }
 
-    select, input[type="number"] {
-      padding: 5px; margin: 5px;
+    .resize {
+      resize: both;
+      overflow: auto;
+      display: inline-block;
+    }
+
+    .logo-button {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+
+    .logo-button img {
+      width: 80px;
+    }
+
+    .logo-text {
+      display: none;
+      font-size: 14px;
+      color: #333;
+    }
+
+    @media (max-width: 768px) {
+      .layout {
+        flex-direction: column;
+      }
+      .sidebar {
+        width: 100%;
+        height: auto;
+      }
+      .editor {
+        width: 100%;
+        height: auto;
+      }
+      .logo-text {
+        display: block;
+      }
     }
   </style>
 </head>
 <body>
 
-<h1>タマプリツール</h1>
+<h1>
+  <button class="logo-button">
+    <img src="logo.png" alt="タマプリロゴ">
+    <span class="logo-text">タマプリツール</span>
+  </button>
+</h1>
 
-<div class="container">
-  <label>プリントサイズ:
-    <select id="sizeSelector" onchange="changePrintSize()">
-      <option value="A4">A4</option>
-      <option value="A3">A3</option>
-      <option value="A5">A5</option>
-    </select>
-  </label>
+<div class="layout">
+  <div class="sidebar">
+    <h3>アップロード</h3>
+    <input type="file" accept=".pdf, image/*"><br><br>
+    <h3>テンプレート</h3>
+    <button onclick="loadTemplate('A4')">A4テンプレート</button>
+    <button onclick="loadTemplate('A3')">A3テンプレート</button>
+    <button onclick="loadTemplate('Grid')">方眼テンプレート</button><br><br>
 
-  <div class="print-area" id="printArea"></div>
+    <label>プリントサイズ:
+      <select id="sizeSelector" onchange="changePrintSize()">
+        <option value="A4">A4</option>
+        <option value="A3">A3</option>
+        <option value="A5">A5</option>
+      </select>
+    </label>
+    <br><br>
+    <button onclick="saveToCookie()">保存</button>
+    <button onclick="loadFromCookie()">読み込み</button>
+  </div>
+  <div class="editor">
+    <div class="print-area" id="printArea"></div>
+  </div>
 </div>
 
-<!-- ボタンバー（スマホ対応） -->
+<!-- ボタンバー -->
 <div class="button-bar">
-  <button onclick="addDaimon()">大問追加</button>
-  <button onclick="addShomon()">小問追加</button>
+  <button onclick="addTextBox()">テキスト</button>
   <button onclick="addAnswerBox()">解答欄</button>
-  <button onclick="addShape('cube')">立体</button>
-  <button onclick="addShape('circle')">円</button>
-  <button onclick="addShape('triangle')">三角</button>
   <button onclick="saveAsPdf()">PDF</button>
 </div>
 
-<!-- jsPDF ライブラリ -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
 <script>
-  let daimonCount = 0;
-  let shomonCount = 0;
-
-  function addDaimon() {
-    daimonCount++;
-    shomonCount = 0;
+  function addTextBox() {
     const div = document.createElement("div");
-    div.className = "question";
-    div.innerHTML = `<h2>【${daimonCount}】</h2>`;
-    document.getElementById("printArea").appendChild(div);
-  }
-
-  function addShomon() {
-    if (daimonCount === 0) addDaimon();
-    shomonCount++;
-    const div = document.createElement("div");
-    div.innerHTML = `<p>（${shomonCount}）ここに問題文を入力</p>`;
+    div.contentEditable = true;
+    div.className = "editable resize";
+    div.textContent = "編集テキスト";
+    div.style.border = "1px dashed #888";
+    div.style.padding = "5px";
+    div.style.margin = "10px 0";
+    div.style.minWidth = "100px";
+    div.style.minHeight = "30px";
     document.getElementById("printArea").appendChild(div);
   }
 
   function addAnswerBox() {
     const div = document.createElement("div");
-    div.className = "answer-box";
+    div.className = "resize";
+    div.style.border = "2px solid #000";
+    div.style.margin = "10px 0";
+    div.style.height = "40px";
+    div.style.width = "100%";
     document.getElementById("printArea").appendChild(div);
-  }
-
-  function addShape(type) {
-    const img = document.createElement("img");
-    img.className = "shape";
-    if (type === 'cube') img.src = '/mnt/data/tamapuri_images/cube.png';
-    if (type === 'circle') img.src = '/mnt/data/tamapuri_images/circle.png';
-    if (type === 'triangle') img.src = '/mnt/data/tamapuri_images/triangle.png';
-    document.getElementById("printArea").appendChild(img);
   }
 
   function changePrintSize() {
@@ -125,6 +185,28 @@
       x: 10,
       y: 10
     });
+  }
+
+  function loadTemplate(template) {
+    const area = document.getElementById("printArea");
+    area.innerHTML += `<div style="border:1px dashed #888; padding:10px; margin:10px 0;">${template}テンプレート挿入</div>`;
+  }
+
+  function saveToCookie() {
+    const content = document.getElementById("printArea").innerHTML;
+    document.cookie = "savedPrint=" + encodeURIComponent(content) + "; path=/; max-age=31536000"; // 1年
+    alert("保存しました。");
+  }
+
+  function loadFromCookie() {
+    const cookies = document.cookie.split('; ');
+    const saved = cookies.find(c => c.startsWith('savedPrint='));
+    if (saved) {
+      document.getElementById("printArea").innerHTML = decodeURIComponent(saved.split('=')[1]);
+      alert("読み込みました。");
+    } else {
+      alert("保存データが見つかりません。");
+    }
   }
 </script>
 
